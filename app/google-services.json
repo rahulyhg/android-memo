@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1065827885113",
+    "firebase_url": "https://memoproject-904df.firebaseio.com",
+    "project_id": "memoproject-904df",
+    "storage_bucket": "memoproject-904df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065827885113:android:33bafcc4c7307644",
+        "android_client_info": {
+          "package_name": "me.dara.memoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065827885113-9o5rabgtnisbid6fn7skfvav53vlbhdc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAZt5TShA7SjyLwfP2q2vGY9FSR_ypYHk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
