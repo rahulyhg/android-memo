@@ -1,11 +1,55 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AuthButtonStyle">
+        <item name="android:minHeight">0dp</item>
+        <item name="android:background">@drawable/login_button_selector</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:paddingTop">@dimen/spacing_tiny</item>
+        <item name="android:paddingBottom">@dimen/spacing_tiny</item>
+    </style>
+
+    <style name="AuthPasswordFieldStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="android:hint">@string/password</item>
+        <item name="android:inputType">textPassword</item>
+    </style>
+
+    <style name="AuthUserNameFieldStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="android:hint">@string/email</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+
+    <style name="AuthInputFieldStyle">
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="passwordToggleEnabled">true</item>
+        <item name="passwordToggleTint">@color/colorAuthButton</item>
+    </style>
+
+
+    <style name="LangSwitchStyle" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorSwitchThumbNormal">#f1f1f1</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#42221f1f</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
     </style>
 
 </resources>

@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">MemoApp</string>
+
+    <string name="email">E-mail</string>
+
+    <string name="password">Password</string>
+
+    <string name="login">Login</string>
+    <string name="text_register">Don\'t have login and password? Register!</string>
+    <string name="register">Register!</string>
+    <string name="fill_username">Fill username</string>
+    <string name="fill_password">Fill password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register_btn">Register</string>
+    <string name="sign_up">Sign up</string>
+
+    <string name="registration_error">Registration failed, please try again</string>
+
+
 </resources>

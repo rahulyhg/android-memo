@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#03a9f4</color>
+    <color name="colorPrimaryDark">#607d8b</color>
+    <color name="colorAccent">#ffffff</color>
+    <color name="colorAuthButton">#f0aa1e</color>
+    <color name="colorAuthButtonPressed">#d6971a</color>
+
+    <color name="colorFabDisabled">#6f8f9e</color>
+
+    <color name="colorSettingGreen">#40c14a</color>
+    <color name="colorSdCard">#0c9c17</color>
+    <color name="colorDelete">#cc2424</color>
+    <color name="colorInfo">#2ba5dc</color>
+    <color name="colorFeedback">#efb542</color>
+    <color name="colorPlayMode">#5789a1</color>
+    <color name="colorPlaySpeed">#ba6666</color>
 </resources>
