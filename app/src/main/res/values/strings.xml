@@ -23,6 +23,7 @@
 
     <string name="mem_text">Mem text</string>
     <string name="create">Create</string>
+    <string name="pick_image_intent_title">Pick image</string>
 
 
 </resources>
