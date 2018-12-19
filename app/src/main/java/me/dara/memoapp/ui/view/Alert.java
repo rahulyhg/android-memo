@@ -1,7 +1,6 @@
 package me.dara.memoapp.ui.view;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -9,21 +8,34 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.content.ContextCompat;
+import java.io.Serializable;
 import me.dara.memoapp.R;
-
-import static androidx.core.os.LocaleListCompat.create;
+import me.dara.memoapp.ui.auth.AlertCallback;
 
 /**
  * @author sardor
  */
 public class Alert extends AppCompatDialogFragment {
 
-  String title = "";
-  String msg = "";
-  OnAlertCallback listener;
+  public String title = "";
+  public String msg = "";
+  public AlertCallback listener;
+
+  public static Alert newInstance(String title, String msg, AlertCallback listener) {
+    Bundle args = new Bundle();
+    args.putString("msg", msg);
+    args.putString("title", title);
+    args.putSerializable("listener", (Serializable) listener);
+    Alert alert = new Alert();
+    alert.setArguments(args);
+    return alert;
+  }
 
   @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
+    Bundle args = getArguments();
+    title = args.getString("title");
+    msg = args.getString("msg");
+    listener = (AlertCallback) args.getSerializable("listener");
     Dialog dg = new AlertDialog.Builder(requireContext())
         .setTitle(title)
         .setMessage(msg)
@@ -41,8 +53,4 @@ public class Alert extends AppCompatDialogFragment {
     });
     return dg;
   }
-}
-
-interface OnAlertCallback {
-  void positiveBtnClicked();
 }

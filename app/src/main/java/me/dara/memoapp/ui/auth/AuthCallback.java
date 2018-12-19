@@ -1,6 +1,6 @@
 package me.dara.memoapp.ui.auth;
 
-public interface OnAuthCallback {
+public interface AuthCallback {
 
   void onRegisterClicked();
 

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author sardor
  */
-public final class AuthActivity extends AppCompatActivity implements OnAuthCallback {
+public final class AuthActivity extends AppCompatActivity implements AuthCallback {
 
   Fragment register, login;
 

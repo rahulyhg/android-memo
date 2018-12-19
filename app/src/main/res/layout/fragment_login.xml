@@ -40,7 +40,7 @@
             >
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_username"
+                android:id="@+id/inputEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@android:color/white"
@@ -48,7 +48,7 @@
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_username"
+                    android:id="@+id/editUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/AuthUserNameFieldStyle"
@@ -57,7 +57,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_password"
+                android:id="@+id/inputPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_small"
@@ -68,7 +68,7 @@
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_password"
+                    android:id="@+id/editPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/AuthPasswordFieldStyle"

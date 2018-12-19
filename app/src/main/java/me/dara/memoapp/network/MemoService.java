@@ -25,33 +25,9 @@ public final class MemoService {
   private DatabaseReference dbReference = database.getReference();
 
   @NotNull
-  public final FirebaseAuth getAuth() {
-    return this.auth;
-  }
-
-  @NotNull
-  public final FirebaseDatabase getDatabase() {
-    return this.database;
-  }
-
-  public final void setDatabase(@NotNull FirebaseDatabase var1) {
-    Intrinsics.checkParameterIsNotNull(var1, "<set-?>");
-    this.database = var1;
-  }
-
-  @NotNull
-  public final DatabaseReference getDbReference() {
-    return this.dbReference;
-  }
-
-  public final void setDbReference(@NotNull DatabaseReference var1) {
-    Intrinsics.checkParameterIsNotNull(var1, "<set-?>");
-    this.dbReference = var1;
-  }
-
-  @NotNull
-  public final LiveData signUp(@NotNull String email, @NotNull String password) {
-    final MutableLiveData signupLiveData = new MutableLiveData<ApiResponse<Object>>();
+  public final MutableLiveData<ApiResponse> signUp(@NotNull String email,
+      @NotNull String password) {
+    final MutableLiveData<ApiResponse> signupLiveData = new MutableLiveData<ApiResponse>();
     this.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
 
       if (task.isSuccessful()) {
@@ -59,7 +35,7 @@ public final class MemoService {
         if (user != null) {
           user.sendEmailVerification().addOnCompleteListener(emailTask -> {
             if (emailTask.isSuccessful()) {
-              signupLiveData.setValue(new ApiResponse( null, Status.SUCCESS));
+              signupLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
             } else {
               signupLiveData.setValue(new ApiResponse(null, Status.FAIL));
             }
@@ -79,10 +55,10 @@ public final class MemoService {
   }
 
   @NotNull
-  public final LiveData signIn(@NotNull String email, @NotNull String password) {
+  public final LiveData<ApiResponse> signIn(@NotNull String email, @NotNull String password) {
     Intrinsics.checkParameterIsNotNull(email, "email");
     Intrinsics.checkParameterIsNotNull(password, "password");
-    final MutableLiveData signInLiveData = new MutableLiveData();
+    final MutableLiveData<ApiResponse> signInLiveData = new MutableLiveData<>();
     this.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
       if (task.isSuccessful()) {
         signInLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
@@ -94,11 +70,9 @@ public final class MemoService {
   }
 
   public final void insertUser(@NotNull User user) {
-    Intrinsics.checkParameterIsNotNull(user, "user");
     this.dbReference.child("users").child(user.getEmail()).setValue(user);
   }
 
   public final void updateUser() {
   }
-
 }
