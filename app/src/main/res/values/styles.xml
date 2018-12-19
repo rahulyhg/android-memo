@@ -52,4 +52,10 @@
         <item name="colorControlNormal">@android:color/white</item>
     </style>
 
+
+    <style name="DialogThemeStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+
 </resources>
