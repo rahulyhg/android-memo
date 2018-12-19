@@ -23,10 +23,11 @@ import me.dara.memoapp.network.model.Status
 
 class LoginFragment : Fragment() {
 
-  lateinit var listener: OnLoginClickListener
+  lateinit var listener: OnAuthCallback
 
 
   lateinit var viewModel: AuthViewModel
+
   val progress: ProgressDialog by lazy {
     ProgressDialog().apply {
       isCancelable = false
@@ -35,7 +36,7 @@ class LoginFragment : Fragment() {
 
   override fun onAttach(context: Context) {
     super.onAttach(context)
-    listener = context as OnLoginClickListener
+    listener = context as OnAuthCallback
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +83,7 @@ class LoginFragment : Fragment() {
 
   fun login(username: String, password: String) {
     progress.show(childFragmentManager, "ProgressDialog")
-    viewModel.signUp(username, password).observe(viewLifecycleOwner, Observer {
+    viewModel.signIn(username, password).observe(viewLifecycleOwner, Observer {
       if (it.status == Status.SUCCESS) {
         listener.loginSuccess()
       } else {

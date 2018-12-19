@@ -16,7 +16,9 @@ android {
     versionName "1.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
-
+  dataBinding {
+    enabled = true
+  }
   buildTypes {
     release {
       minifyEnabled false
@@ -26,33 +28,32 @@ android {
   packagingOptions {
     exclude 'META-INF/proguard/androidx-annotations.pro'
   }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 }
 
 dependencies {
   def lifecycle_version = "2.0.0"
   def room_version = "2.1.0-alpha03"
-
-
-  api fileTree(dir: 'libs', include: ['*.jar'])
-
+  api fileTree(include: ['*.jar'], dir: 'libs')
   //Auth
   api 'com.google.firebase:firebase-auth:16.1.0'
   //Storage
   api 'com.google.firebase:firebase-storage:16.0.5'
   //DataBase
   api 'com.google.firebase:firebase-database:16.0.5'
-
   //Androidx
   api 'androidx.legacy:legacy-support-v13:1.0.0'
   api 'androidx.appcompat:appcompat:1.1.0-alpha01'
   api 'com.google.android.material:material:1.1.0-alpha02'
   api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
   //Lifecycle, ViewModel and LiveData
   api "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
-  api "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version" // use -ktx for Kotlin
+  api "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+  // use -ktx for Kotlin
   api "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-
   //Room
   api "androidx.room:room-runtime:$room_version"
   implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'

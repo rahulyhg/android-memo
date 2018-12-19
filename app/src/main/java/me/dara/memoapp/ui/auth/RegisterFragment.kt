@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_register.*
-import me.dara.memoapp.ui.view.Alert
 import me.dara.memoapp.ui.view.ProgressDialog
 import me.dara.memoapp.R
 import me.dara.memoapp.network.model.Status
@@ -19,7 +18,7 @@ import me.dara.memoapp.network.model.Status
 
 class RegisterFragment : Fragment() {
 
-  lateinit var listener: OnLoginClickListener
+  lateinit var listener: OnAuthCallback
   val progress: ProgressDialog by lazy {
     ProgressDialog().apply {
       isCancelable = false
@@ -31,7 +30,7 @@ class RegisterFragment : Fragment() {
 
   override fun onAttach(context: Context) {
     super.onAttach(context)
-    listener = context as OnLoginClickListener
+    listener = context as OnAuthCallback
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

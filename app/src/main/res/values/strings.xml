@@ -21,9 +21,10 @@
 
     <string name="date_mem">Date of mem</string>
 
-    <string name="mem_text">Mem text</string>
+    <string name="mem_description">Mem Description</string>
     <string name="create">Create</string>
     <string name="pick_image_intent_title">Pick image</string>
+    <string name="memo_title">Title</string>
 
 
 </resources>

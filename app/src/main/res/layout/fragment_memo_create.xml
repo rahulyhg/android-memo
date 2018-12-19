@@ -1,33 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.dashboard.MemoCreateFragment">
+    tools:context=".ui.dashboard.MemoCreateFragment"
+    >
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imgMemo"
-        android:layout_width="164dp"
-        android:layout_height="164dp"/>
+    <data>
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editMemo"
-        android:hint="@string/mem_text"
+        <variable
+            name="user" type="me.dara.memoapp.network.model.User"/>
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/dateMemo"
-        android:text="@string/date_mem"
-        android:layout_width="wrap_content"
-        android:padding="10dp"
-        android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatEditText
+            android:hint="@string/memo_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnCreateMem"
-        android:text="@string/create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgMemo"
+            android:layout_width="164dp"
+            android:layout_height="164dp"/>
 
-</LinearLayout>
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editMemo"
+            android:hint="@string/mem_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dateMemo"
+            android:text="@string/date_mem"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/linearCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:text="Do this"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCreateMem"
+            android:text="@string/create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</layout>
