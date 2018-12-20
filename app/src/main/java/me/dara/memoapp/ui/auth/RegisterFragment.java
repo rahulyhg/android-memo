@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class RegisterFragment extends Fragment {
 
   @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     if (requestCode == 1000) {
-      Bitmap bmp = ImageUtil.getImageFromResult(requireContext(),resultCode,data);
+      Bitmap bmp = ImageUtil.getImageFromResult(requireContext(), resultCode, data);
       binding.imgRegister.setImageBitmap(bmp);
     }
   }
@@ -61,12 +62,23 @@ public class RegisterFragment extends Fragment {
     progress = new ProgressDialog();
     progress.setCancelable(false);
 
+    binding.imgCloseRegister.setOnClickListener(v -> {
+      callback.onCloseClicked();
+      clearFields();
+    });
+
     binding.btnRegister.setOnClickListener(v -> {
       String email = binding.editRegisterEmail.getText().toString();
       String password = binding.editRegisterPassword.getText().toString();
       String confirmPassword = binding.editConfirmPassword.getText().toString();
       if (validateInput(email, password, confirmPassword)) {
-        signUp(email, password);
+        Bitmap bitmap = null;
+        try {
+          bitmap = ((BitmapDrawable) binding.imgRegister.getDrawable()).getBitmap();
+        }catch (ClassCastException e){
+          Log.i(RegisterFragment.class.getName(),e.getLocalizedMessage());
+        }
+        signUp(email, password, bitmap);
       }
     });
     binding.imgRegister.setOnClickListener(v -> {
@@ -98,10 +110,9 @@ public class RegisterFragment extends Fragment {
     });
   }
 
-  private void signUp(String email, String password) {
-    Bitmap bitmap = ((BitmapDrawable) binding.imgRegister.getDrawable()).getBitmap();
+  private void signUp(String email, String password, Bitmap bmp) {
     User user = new User(email, password, "", "");
-    user.photoBitmap = bitmap;
+    user.photoBitmap = bmp;
     progress.show(getChildFragmentManager(), "ProgressDialog");
     viewModel.signUp(user).observe(
         getViewLifecycleOwner(), response -> {
@@ -111,10 +122,12 @@ public class RegisterFragment extends Fragment {
             String title = getString(R.string.info);
             Alert alert = Alert.newInstance(title, msg);
             alert.listener = () -> {
+              clearFields();
               callback.registerSuccess();
             };
             alert.show(getChildFragmentManager(), "Alert");
           } else {
+            clearFields();
             Toast.makeText(requireContext(), R.string.registration_error, Toast.LENGTH_SHORT)
                 .show();
           }
@@ -137,5 +150,12 @@ public class RegisterFragment extends Fragment {
     }
 
     return isValid;
+  }
+
+  private void clearFields() {
+    binding.editConfirmPassword.setText("");
+    binding.editRegisterPassword.setText("");
+    binding.editRegisterEmail.setText("");
+    binding.imgRegister.setImageResource(R.drawable.ic_person);
   }
 }

@@ -19,7 +19,8 @@ public final class User {
   @Exclude
   public Bitmap photoBitmap;
 
-  public User(@NotNull String email, @NotNull String password, @NotNull String photoUrl,String uid) {
+  public User(@NotNull String email, @NotNull String password, @NotNull String photoUrl,
+      String uid) {
     this.email = email;
     this.password = password;
     this.photoUrl = photoUrl;
@@ -27,13 +28,15 @@ public final class User {
   }
 
   public User() {
-    this("", "", "","");
+    this("", "", "", "");
   }
 
   @Exclude
   public byte[] getByteOfBitmap() {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+    if (photoBitmap != null) {
+      photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+    }
     return bos.toByteArray();
   }
 }

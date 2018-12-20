@@ -46,7 +46,7 @@
             android:paddingRight="@dimen/spacing_55"
             >
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imgRegister"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
