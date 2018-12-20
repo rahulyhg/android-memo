@@ -1,52 +1,39 @@
 package me.dara.memoapp.network.model;
 
+import android.graphics.Bitmap;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+import java.io.ByteArrayOutputStream;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sardor
  */
+@IgnoreExtraProperties
 public final class User {
-   @NotNull
-   private final String email;
-   @NotNull
-   private final String password;
-   @NotNull
-   private final String photoUrl;
-   private final boolean gender;
-   private final int age;
+  public String email;
+  public String password;
+  public String photoUrl;
+  public String uid;
 
-   @NotNull
-   public final String getEmail() {
-      return this.email;
-   }
+  @Exclude
+  public Bitmap photoBitmap;
 
-   @NotNull
-   public final String getPassword() {
-      return this.password;
-   }
+  public User(@NotNull String email, @NotNull String password, @NotNull String photoUrl,String uid) {
+    this.email = email;
+    this.password = password;
+    this.photoUrl = photoUrl;
+    this.uid = uid;
+  }
 
-   @NotNull
-   public final String getPhotoUrl() {
-      return this.photoUrl;
-   }
+  public User() {
+    this("", "", "","");
+  }
 
-   public final boolean getGender() {
-      return this.gender;
-   }
-
-   public final int getAge() {
-      return this.age;
-   }
-
-   public User(@NotNull String email, @NotNull String password, @NotNull String photoUrl, boolean gender, int age) {
-      this.email = email;
-      this.password = password;
-      this.photoUrl = photoUrl;
-      this.gender = gender;
-      this.age = age;
-   }
-
-   public User() {
-      this("", "", "", false, 0);
-   }
+  @Exclude
+  public byte[] getByteOfBitmap() {
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+    return bos.toByteArray();
+  }
 }

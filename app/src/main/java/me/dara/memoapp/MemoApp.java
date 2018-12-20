@@ -11,11 +11,6 @@ public final class MemoApp extends Application {
    @NotNull
    public AppModule appModule;
 
-   @NotNull
-   public final AppModule getAppModule() {
-      return appModule;
-   }
-
 
    public void onCreate() {
       super.onCreate();

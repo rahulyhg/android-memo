@@ -17,8 +17,9 @@ public class LauncherActivity extends AppCompatActivity {
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_launcher);
+    boolean isAuthorized = true;//((MemoApp) getApplication()).appModule.webService.checkForAuth();
     Intent intent;
-    if (((MemoApp) getApplication()).appModule.webService.checkForAuth()) {
+    if (isAuthorized) {
       intent = new Intent(this, AuthActivity.class);
     } else {
       intent = new Intent(this, MainActivity.class);

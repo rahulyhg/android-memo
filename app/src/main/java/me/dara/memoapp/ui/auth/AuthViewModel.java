@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import me.dara.memoapp.AppModule;
 import me.dara.memoapp.MemoApp;
 import me.dara.memoapp.network.model.ApiResponse;
+import me.dara.memoapp.network.model.User;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,6 +22,10 @@ public final class AuthViewModel extends AndroidViewModel {
   public final LiveData<ApiResponse> signUp(@NotNull String email, @NotNull String password) {
 
     return this.module.webService.signUp(email, password);
+  }
+
+  public final LiveData<ApiResponse> insertUser(User user){
+    return this.module.webService.insertUser(user);
   }
 
   @NotNull

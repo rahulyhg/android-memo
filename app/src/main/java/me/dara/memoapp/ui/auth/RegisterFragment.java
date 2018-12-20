@@ -1,6 +1,9 @@
 package me.dara.memoapp.ui.auth;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import me.dara.memoapp.R;
 import me.dara.memoapp.databinding.FragmentRegisterBinding;
+import me.dara.memoapp.network.model.ApiResponse;
 import me.dara.memoapp.network.model.Status;
+import me.dara.memoapp.network.model.User;
 import me.dara.memoapp.ui.view.Alert;
 import me.dara.memoapp.ui.view.ProgressDialog;
+import me.dara.memoapp.util.ImageUtil;
 
 /**
  * @author sardor
@@ -30,6 +37,13 @@ public class RegisterFragment extends Fragment {
   @Override public void onAttach(@NonNull Context context) {
     super.onAttach(context);
     callback = (AuthCallback) context;
+  }
+
+  @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    if (requestCode == 1000) {
+      Bitmap bmp = ImageUtil.getImageFromResult(requireContext(), resultCode, data);
+      binding.imgRegister.setImageBitmap(bmp);
+    }
   }
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,9 +62,14 @@ public class RegisterFragment extends Fragment {
       String email = binding.editRegisterEmail.getText().toString();
       String password = binding.editRegisterPassword.getText().toString();
       String confirmPassword = binding.editConfirmPassword.getText().toString();
-      if (validateInput(email, password, confirmPassword)) {
+      signUp("","");
+      //if (validateInput(email, password, confirmPassword)) {
+      //  signUp(email, password);
+      //}
+    });
+    binding.imgRegister.setOnClickListener(v -> {
 
-      }
+      startActivityForResult(ImageUtil.getPickImageIntent(requireContext()), 1000);
     });
 
     binding.editConfirmPassword.addTextChangedListener(new FormTextWatcher() {
@@ -78,19 +97,24 @@ public class RegisterFragment extends Fragment {
   }
 
   private void signUp(String email, String password) {
+    Bitmap bitmap = ((BitmapDrawable) binding.imgRegister.getDrawable()).getBitmap();
+    User user = new User("sardor.islomov.96@gmail.com", "9820496s", email + "_avatar_url.jpg","");
+    user.photoBitmap = bitmap;
     progress.show(getChildFragmentManager(), "ProgressDialog");
-    viewModel.signUp(email, password).observe(getViewLifecycleOwner(), response -> {
-      progress.dismiss();
-      if (response.getStatus() == Status.SUCCESS) {
-        String msg = getString(R.string.email_sent, email);
-        String title = getString(R.string.info);
-        Alert alert = Alert.newInstance(title, msg, () -> {
-          callback.registerSuccess();
+    viewModel.insertUser(user).observe(
+        getViewLifecycleOwner(), response -> {
+          progress.dismiss();
+          if (response.getStatus() == Status.SUCCESS) {
+            String msg = getString(R.string.email_sent, email);
+            String title = getString(R.string.info);
+            Alert alert = Alert.newInstance(title, msg, () -> {
+              callback.registerSuccess();
+            });
+          } else {
+            Toast.makeText(requireContext(), R.string.registration_error, Toast.LENGTH_SHORT)
+                .show();
+          }
         });
-      } else {
-        Toast.makeText(requireContext(), R.string.registration_error, Toast.LENGTH_SHORT).show();
-      }
-    });
   }
 
   private boolean validateInput(String email, String password, String confirmPassword) {

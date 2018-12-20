@@ -1,6 +1,5 @@
 package me.dara.memoapp;
 
-import kotlin.jvm.internal.Intrinsics;
 import me.dara.memoapp.network.MemoService;
 import org.jetbrains.annotations.NotNull;
 
