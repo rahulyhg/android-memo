@@ -21,11 +21,10 @@ public class Alert extends AppCompatDialogFragment {
   public String msg = "";
   public AlertCallback listener;
 
-  public static Alert newInstance(String title, String msg, AlertCallback listener) {
+  public static Alert newInstance(String title, String msg) {
     Bundle args = new Bundle();
     args.putString("msg", msg);
     args.putString("title", title);
-    args.putSerializable("listener", (Serializable) listener);
     Alert alert = new Alert();
     alert.setArguments(args);
     return alert;
@@ -35,7 +34,6 @@ public class Alert extends AppCompatDialogFragment {
     Bundle args = getArguments();
     title = args.getString("title");
     msg = args.getString("msg");
-    listener = (AlertCallback) args.getSerializable("listener");
     Dialog dg = new AlertDialog.Builder(requireContext())
         .setTitle(title)
         .setMessage(msg)

@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import me.dara.memoapp.R;
-import me.dara.memoapp.ui.dashboard.MemoCreateFragment;
+import me.dara.memoapp.ui.memoCreate.MemoCreateFragment;
 
 /**
  * @author sardor

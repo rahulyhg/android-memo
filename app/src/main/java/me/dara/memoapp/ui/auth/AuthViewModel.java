@@ -18,19 +18,13 @@ public final class AuthViewModel extends AndroidViewModel {
   @NotNull
   private final AppModule module;
 
-  @NotNull
-  public final LiveData<ApiResponse> signUp(@NotNull String email, @NotNull String password) {
-
-    return this.module.webService.signUp(email, password);
-  }
-
-  public final LiveData<ApiResponse> insertUser(User user){
-    return this.module.webService.insertUser(user);
+  public final LiveData<ApiResponse> signUp(User user){
+    return this.module.webService.signUp(user);
   }
 
   @NotNull
   public final LiveData<ApiResponse> signIn(@NotNull String email, @NotNull String password) {
-    return this.module.webService.signUp(email, password);
+    return this.module.webService.signIn(email, password);
   }
 
   public AuthViewModel(@NotNull Application app) {

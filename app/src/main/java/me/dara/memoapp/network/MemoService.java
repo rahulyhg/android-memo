@@ -40,32 +40,6 @@ public final class MemoService {
   @NonNull
   StorageReference storageRef = storage.getReference();
 
-  @NotNull
-  public final MutableLiveData<ApiResponse> signUp(@NotNull String email,
-      @NotNull String password) {
-    final MutableLiveData<ApiResponse> signupLiveData = new MutableLiveData<ApiResponse>();
-    this.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-
-      if (task.isSuccessful()) {
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-          user.sendEmailVerification().addOnCompleteListener(emailTask -> {
-            if (emailTask.isSuccessful()) {
-              signupLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
-            } else {
-              signupLiveData.setValue(new ApiResponse(null, Status.FAIL));
-            }
-          });
-        } else {
-          signupLiveData.setValue(new ApiResponse(null, Status.FAIL));
-        }
-      } else {
-        signupLiveData.setValue(new ApiResponse(null, Status.FAIL));
-      }
-    });
-    return signupLiveData;
-  }
-
   public final boolean checkForAuth() {
     return this.auth.getCurrentUser() == null;
   }
@@ -83,7 +57,7 @@ public final class MemoService {
     return signInLiveData;
   }
 
-  public final MutableLiveData<ApiResponse> insertUser(@NotNull User user) {
+  public final MutableLiveData<ApiResponse> signUp(@NotNull User user) {
     final MutableLiveData<ApiResponse> userLiveData = new MutableLiveData<>();
     auth.createUserWithEmailAndPassword(user.email, user.password).addOnCompleteListener(task -> {
       if (task.isSuccessful()) {
@@ -92,42 +66,43 @@ public final class MemoService {
           fbUser.sendEmailVerification().addOnCompleteListener(emailTask -> {
             if (emailTask.isSuccessful()) {
               user.uid = fbUser.getUid();
-              dbReference.child("users").setValue(user).addOnCompleteListener(
-                  userSaveTask -> {
-                    if (userSaveTask.isSuccessful()) {
-                      StorageMetadata metadata = new StorageMetadata.Builder()
-                              .setContentType("image/jpg")
-                              .build();
-
-                      StorageReference avtarRef =
-                          storageRef.child(
-                              "images/"+"avatarurl.jpg");
-                      avtarRef.putBytes(user.getByteOfBitmap(),metadata).addOnCompleteListener(
-                          avatarTask -> {
-                            if (avatarTask.isSuccessful()) {
-                              userLiveData.postValue(new ApiResponse(null, Status.SUCCESS));
+              StorageMetadata metadata = new StorageMetadata.Builder()
+                  .setContentType("image/jpg")
+                  .build();
+              StorageReference avtarRef =
+                  storageRef.child(
+                      "/user/thumbnails/"
+                          + user.uid + "/" + user.uid.toLowerCase() + "avatar_url.jpg");
+              avtarRef.putBytes(user.getByteOfBitmap(), metadata).addOnCompleteListener(
+                  avatarTask -> {
+                    if (avatarTask.isSuccessful()) {
+                      user.photoUrl = avatarTask.getResult().getMetadata().getPath();
+                      dbReference.child("users").setValue(user).addOnCompleteListener(
+                          userSaveTask -> {
+                            if (userSaveTask.isSuccessful()) {
+                              userLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
                             } else {
-                              Log.i(MemoService.class.getName(), "Failed to upload avatar");
-                              // failed upload avatar task
+                              userLiveData.setValue(new ApiResponse(null, Status.FAIL));
+                              Log.i(MemoService.class.getName(), "Failed to saving user into DB");
                             }
                           });
                     } else {
-                      Log.i(MemoService.class.getName(), "Failed to saving user into DB");
-                      // failed saving user into DB
+                      Log.i(MemoService.class.getName(), "Failed to upload avatar");
+                      userLiveData.setValue(new ApiResponse(null, Status.FAIL));
                     }
                   });
             } else {
               Log.i(MemoService.class.getName(), "Failed sending email");
-              // failed sending email
+              userLiveData.setValue(new ApiResponse(null, Status.FAIL));
             }
           });
         } else {
           Log.i(MemoService.class.getName(), "FbUser is null");
-          // fbUser is null
+          userLiveData.setValue(new ApiResponse(null, Status.FAIL));
         }
       } else {
         Log.i(MemoService.class.getName(), "Failed creating user");
-        // failed creating user
+        userLiveData.setValue(new ApiResponse(null, Status.FAIL));
       }
     });
     return userLiveData;

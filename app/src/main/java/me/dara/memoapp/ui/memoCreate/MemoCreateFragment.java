@@ -1,4 +1,4 @@
-package me.dara.memoapp.ui.dashboard;
+package me.dara.memoapp.ui.memoCreate;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,13 +11,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import me.dara.memoapp.R;
 import me.dara.memoapp.databinding.FragmentMemoCreateBinding;
+import me.dara.memoapp.ui.MainActivityViewModel;
 
 /**
  * @author sardor
  */
 public class MemoCreateFragment extends Fragment {
 
-  DashBoardViewModel viewModel;
+  MainActivityViewModel viewModel;
   FragmentMemoCreateBinding binding;
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +30,7 @@ public class MemoCreateFragment extends Fragment {
 
   @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    viewModel = ViewModelProviders.of(this).get(DashBoardViewModel.class);
+    viewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
 
   }
 

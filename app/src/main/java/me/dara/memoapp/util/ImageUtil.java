@@ -18,6 +18,7 @@ import android.util.Log;
 import androidx.core.content.FileProvider;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import me.dara.memoapp.R;
@@ -29,7 +30,7 @@ public class ImageUtil {
 
   private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;        // min pixels
   private static final String TAG = "ImagePicker";
-  private static final String TEMP_IMAGE_NAME = "tempImage";
+  private static final String TEMP_IMAGE_NAME = "tempImage.jpg";
 
   public static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
 
