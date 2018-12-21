@@ -20,6 +20,8 @@ import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import me.dara.memoapp.AppExecutors;
 import me.dara.memoapp.R;
 import me.dara.memoapp.db.EntityUtil;
@@ -212,55 +214,41 @@ public final class MemoService {
 
   public LiveData<ApiResponse> loadMemos() {
     MediatorLiveData<ApiResponse> mediatorLiveData = new MediatorLiveData<>();
-
-    MutableLiveData<ApiResponse> dbSource = loadMemosFromLocal();
+    LiveData<ApiResponse> dbSource = loadMemosFromLocal();
     MutableLiveData<ApiResponse> serviceSource = loadMemosFromService();
-    mediatorLiveData.addSource(serviceSource, serviceResponse -> {
-      
-      if (serviceResponse.getStatus() == Status.SUCCESS) {
-        Object object = serviceResponse.getObj();
-        if (object != null) {
-          List<Memo> memoList = (List<Memo>) object;
-          //db.memoDao().insert(EntityUtil.transform(memoList));
-          mediatorLiveData.postValue(new ApiResponse(memoList, Status.SUCCESS));
-        }
+
+    mediatorLiveData.addSource(dbSource, dbResponse -> {
+      if (dbResponse.getStatus() == Status.SUCCESS) {
+        mediatorLiveData.removeSource(dbSource);
+        mediatorLiveData.postValue(dbResponse);
+        mediatorLiveData.addSource(serviceSource, serviceResponse -> {
+          mediatorLiveData.removeSource(serviceSource);
+          if (serviceResponse.getStatus() == Status.SUCCESS) {
+            executors.IO.execute(() -> {
+              Object object = serviceResponse.getObj();
+              if (object != null) {
+                List<Memo> memoList = (List<Memo>) object;
+                db.memoDao().insert(EntityUtil.transform(memoList));
+                mediatorLiveData.postValue(new ApiResponse(memoList, Status.SUCCESS));
+              }
+            });
+          } else {
+            mediatorLiveData.postValue(new ApiResponse(null, Status.FAIL));
+          }
+        });
       } else {
         mediatorLiveData.postValue(new ApiResponse(null, Status.FAIL));
       }
-      //dbResponse.getStatus().toString();
-      //if (dbResponse.getStatus() == Status.SUCCESS) {
-      //  mediatorLiveData.removeSource(dbSource);
-      //  responseLiveData.postValue(dbResponse);
-      //
-      //  mediatorLiveData.addSource(serviceSource, serviceResponse -> {
-      //    mediatorLiveData.removeSource(serviceSource);
-      //    if (serviceResponse.getStatus() == Status.SUCCESS) {
-      //      Object object = serviceResponse.getObj();
-      //      if (object != null) {
-      //        List<Memo> memoList = (List<Memo>) object;
-      //        //db.memoDao().insert(EntityUtil.transform(memoList));
-      //        responseLiveData.postValue(new ApiResponse(memoList, Status.SUCCESS));
-      //      }
-      //    } else {
-      //      responseLiveData.postValue(new ApiResponse(null, Status.FAIL));
-      //    }
-      //  });
-      //} else {
-      //  responseLiveData.postValue(new ApiResponse(null, Status.FAIL));
-      //}
     });
-    dbSource.setValue(new ApiResponse(null, Status.SUCCESS));
+
     return mediatorLiveData;
   }
 
-  private MutableLiveData<ApiResponse> loadMemosFromLocal() {
-    MutableLiveData<ApiResponse> result = new MutableLiveData<>();
-    result.setValue(new ApiResponse(null, Status.SUCCESS));
-    return result;
-    //return Transformations.map(db.memoDao().loadMemos(),
-    //    input -> {
-    //      List<Memo> memoList = EntityUtil.map(input);
-    //      return new ApiResponse(memoList, Status.SUCCESS);
-    //    });
+  private LiveData<ApiResponse> loadMemosFromLocal() {
+    return Transformations.map(db.memoDao().loadMemos(),
+        input -> {
+          List<Memo> memoList = EntityUtil.map(input);
+          return new ApiResponse(memoList, Status.SUCCESS);
+        });
   }
 }

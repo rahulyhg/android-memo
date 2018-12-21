@@ -3,6 +3,7 @@ package me.dara.memoapp.db;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Dao
 public abstract class MemoDao {
 
-  @Insert
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
   public abstract void insert(List<MemoEntity> entities);
 
   @Query("SELECT * FROM memo")

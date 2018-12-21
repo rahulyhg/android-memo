@@ -22,13 +22,13 @@ public class Converters {
     List<Object> objectList = Arrays.asList((str.split("\\s*,\\s*")));
     List<String> keys = new ArrayList<>();
     List<Boolean> values = new ArrayList<>();
-    for (Object obj : objectList) {
-      try {
-        String value = (String) obj;
-        keys.add(value);
-      } catch (ClassCastException e) {
-        boolean bol = (boolean) obj;
-        values.add(bol);
+    int count = objectList.size();
+    int booleanIndex = count / 2;
+    for (int i = 0; i < count; i++) {
+      if (i >= booleanIndex) {
+        values.add(Boolean.parseBoolean(objectList.get(i).toString()));
+      } else {
+        keys.add(objectList.get(i).toString());
       }
     }
     for (int i = 0, j = 0; i < keys.size(); i++, j++) {
