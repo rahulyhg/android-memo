@@ -46,12 +46,13 @@ dependencies {
   //Lifecycle, ViewModel and LiveData
   api "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
   api "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-  // use -ktx for Kotlin
   api "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
   //Room
   api "androidx.room:room-runtime:$room_version"
-  implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
+  implementation 'androidx.legacy:legacy-support-v4:1.0.0'
   annotationProcessor "androidx.room:room-compiler:$room_version"
+
+  implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 apply plugin: 'com.google.gms.google-services'

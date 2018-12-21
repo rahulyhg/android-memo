@@ -1,8 +1,10 @@
 package me.dara.memoapp.ui.memoCreate;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +13,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import me.dara.memoapp.R;
 import me.dara.memoapp.databinding.FragmentMemoCreateBinding;
-import me.dara.memoapp.network.model.ApiResponse;
 import me.dara.memoapp.network.model.Memo;
 import me.dara.memoapp.network.model.Status;
 import me.dara.memoapp.ui.MainActivityViewModel;
+import me.dara.memoapp.ui.MemoCallback;
 import me.dara.memoapp.ui.view.ProgressDialog;
 import me.dara.memoapp.util.ImageUtil;
 
@@ -35,6 +36,14 @@ public class MemoCreateFragment extends Fragment {
   MainActivityViewModel viewModel;
   FragmentMemoCreateBinding binding;
   ProgressDialog progress;
+  MemoCallback callback;
+
+  int dummyI = 0;
+
+  @Override public void onAttach(@NonNull Context context) {
+    super.onAttach(context);
+    callback = (MemoCallback) context;
+  }
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -59,14 +68,8 @@ public class MemoCreateFragment extends Fragment {
     progress = new ProgressDialog();
     progress.setCancelable(false);
     binding.btnCreateMem.setOnClickListener(v -> {
-      List<String> todoList = new ArrayList<>();
-      todoList.add("Todo 1");
-      todoList.add("Todo 2");
-      todoList.add("Todo 3");
-      File file = ((File) binding.imgMemo.getTag());
-      Memo memo = new Memo(todoList, "This is title", "This is description",
-          Calendar.getInstance().getTime().getTime(), file);
-      postMemo(memo);
+
+      postMemo(create());
     });
     binding.imgMemo.setOnClickListener(v -> {
       startActivityForResult(ImageUtil.getPickImageIntent(requireContext()), 1001);
@@ -78,10 +81,27 @@ public class MemoCreateFragment extends Fragment {
     viewModel.postMemo(memo).observe(getViewLifecycleOwner(), response -> {
       progress.dismiss();
       if (response.getStatus() == Status.SUCCESS) {
-        Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG).show();
+        //Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG).show();
+        //if (dummyI != 10) {
+        //  postMemo(create());
+        //}
       } else {
         Toast.makeText(requireContext(), R.string.memo_create_error, Toast.LENGTH_LONG).show();
       }
     });
+  }
+
+  public Memo create() {
+    List<Map<String, Boolean>> todoList = new ArrayList<>();
+    Map<String, Boolean> map = new HashMap<>();
+    map.put("Todo1 " + dummyI, false);
+    map.put("Todo2 " + dummyI, false);
+    map.put("Todo3 " + dummyI, false);
+    File file = ((File) binding.imgMemo.getTag());
+    long created = System.currentTimeMillis();
+    Memo memo = new Memo(map, "This is title " + dummyI, "This is description " + dummyI,
+        created, file);
+    dummyI++;
+    return memo;
   }
 }

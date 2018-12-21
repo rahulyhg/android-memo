@@ -28,5 +28,8 @@
     <string name="email_not_verified">Email not verified</string>
     <string name="memo_create_error">Memo creation error</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

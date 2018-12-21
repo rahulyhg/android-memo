@@ -3,19 +3,27 @@ package me.dara.memoapp.network;
 import android.net.Uri;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.lifecycle.Transformations;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import java.util.ArrayList;
+import java.util.List;
+import me.dara.memoapp.AppExecutors;
 import me.dara.memoapp.R;
+import me.dara.memoapp.db.EntityUtil;
+import me.dara.memoapp.db.MemoDb;
 import me.dara.memoapp.network.model.ApiResponse;
 import me.dara.memoapp.network.model.Memo;
 import me.dara.memoapp.network.model.Status;
@@ -30,17 +38,23 @@ public final class MemoService {
   private FirebaseAuth auth = FirebaseAuth.getInstance();
 
   @NonNull
-  FirebaseDatabase db = FirebaseDatabase.getInstance();
-
-  private DatabaseReference dbReference = db.getReference();
+  private DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
 
   @NonNull
-  FirebaseStorage storage = FirebaseStorage.getInstance();
+  private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+  @Nullable
+  private FirebaseUser user = auth.getCurrentUser();
 
   @NonNull
-  StorageReference storageRef = storage.getReference();
+  private AppExecutors executors;
 
-  FirebaseUser user = auth.getCurrentUser();
+  @NonNull MemoDb db;
+
+  public MemoService(MemoDb db, AppExecutors executors) {
+    this.executors = executors;
+    this.db = db;
+  }
 
   public final boolean checkForAuth() {
     return auth.getCurrentUser() == null;
@@ -86,15 +100,19 @@ public final class MemoService {
                   avatarTask -> {
                     if (avatarTask.isSuccessful()) {
                       nUser.photoUrl = avatarTask.getResult().getMetadata().getPath();
-                      dbReference.child("users").setValue(user).addOnCompleteListener(
-                          userSaveTask -> {
-                            if (userSaveTask.isSuccessful()) {
-                              userLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
-                            } else {
-                              userLiveData.setValue(new ApiResponse(null, Status.FAIL));
-                              Log.i(MemoService.class.getName(), "Failed to saving user into DB");
-                            }
-                          });
+                      dbReference.child("users")
+                          .child(user.getUid().toLowerCase())
+                          .setValue(user)
+                          .addOnCompleteListener(
+                              userSaveTask -> {
+                                if (userSaveTask.isSuccessful()) {
+                                  userLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
+                                } else {
+                                  userLiveData.setValue(new ApiResponse(null, Status.FAIL));
+                                  Log.i(MemoService.class.getName(),
+                                      "Failed to saving user into DB");
+                                }
+                              });
                     } else {
                       Log.i(MemoService.class.getName(), "Failed to upload avatar");
                       userLiveData.setValue(new ApiResponse(null, Status.FAIL));
@@ -134,16 +152,34 @@ public final class MemoService {
           fileTask -> {
             if (fileTask.isSuccessful()) {
               Log.i(MemoService.class.getName(), "Memo file upload succeed");
-              dbReference.child("memos").setValue(memo).addOnCompleteListener(
-                  memoTask -> {
-                    if (memoTask.isSuccessful()) {
-                      Log.i(MemoService.class.getName(), "Memo upload succeed");
-                      memoLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
-                    } else {
-                      Log.i(MemoService.class.getName(), "Memo upload failed");
-                      memoLiveData.setValue(new ApiResponse(null, Status.FAIL));
-                    }
-                  });
+              memo.downloadUrl = fileTask.getResult().getMetadata().getPath();
+              dbReference.child("memos")
+                  .child(user.getUid().toLowerCase())
+                  .child(memo.createdTime.toString())
+                  .setValue(memo)
+                  .addOnCompleteListener(
+                      memoTask -> {
+                        if (memoTask.isSuccessful()) {
+                          Log.i(MemoService.class.getName(), "Memo upload succeed");
+                          memoLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
+                        } else {
+                          Log.i(MemoService.class.getName(), "Memo upload failed");
+                          memoLiveData.setValue(new ApiResponse(null, Status.FAIL));
+                        }
+                      });
+              //Map<String, Object> memoValues = memo.toMap();
+              //Map<String, Object> childUpdates = new HashMap<>();
+              //childUpdates.put("/memos/" + key, memoValues);
+              //dbReference.updateChildren(childUpdates).addOnCompleteListener(
+              //    memoTask -> {
+              //      if (memoTask.isSuccessful()) {
+              //        Log.i(MemoService.class.getName(), "Memo upload succeed");
+              //        memoLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
+              //      } else {
+              //        Log.i(MemoService.class.getName(), "Memo upload failed");
+              //        memoLiveData.setValue(new ApiResponse(null, Status.FAIL));
+              //      }
+              //    });
             } else {
               Log.i(MemoService.class.getName(), "Memo file upload failed");
               memoLiveData.setValue(new ApiResponse(null, Status.FAIL));
@@ -151,5 +187,80 @@ public final class MemoService {
           });
     }
     return memoLiveData;
+  }
+
+  private MutableLiveData<ApiResponse> loadMemosFromService() {
+    MutableLiveData<ApiResponse> memoLiveData = new MutableLiveData<>();
+    dbReference.child("memos/" + user.getUid().toLowerCase())
+        .orderByKey()
+        .addListenerForSingleValueEvent(
+            new ValueEventListener() {
+              @Override public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Memo> memoList = new ArrayList<>();
+                for (DataSnapshot memoSnapshot : dataSnapshot.getChildren()) {
+                  memoList.add(memoSnapshot.getValue(Memo.class));
+                }
+                memoLiveData.setValue(new ApiResponse(memoList, Status.SUCCESS));
+              }
+
+              @Override public void onCancelled(@NonNull DatabaseError databaseError) {
+                memoLiveData.setValue(new ApiResponse(null, Status.FAIL));
+              }
+            });
+    return memoLiveData;
+  }
+
+  public LiveData<ApiResponse> loadMemos() {
+    MediatorLiveData<ApiResponse> mediatorLiveData = new MediatorLiveData<>();
+
+    MutableLiveData<ApiResponse> dbSource = loadMemosFromLocal();
+    MutableLiveData<ApiResponse> serviceSource = loadMemosFromService();
+    mediatorLiveData.addSource(serviceSource, serviceResponse -> {
+      
+      if (serviceResponse.getStatus() == Status.SUCCESS) {
+        Object object = serviceResponse.getObj();
+        if (object != null) {
+          List<Memo> memoList = (List<Memo>) object;
+          //db.memoDao().insert(EntityUtil.transform(memoList));
+          mediatorLiveData.postValue(new ApiResponse(memoList, Status.SUCCESS));
+        }
+      } else {
+        mediatorLiveData.postValue(new ApiResponse(null, Status.FAIL));
+      }
+      //dbResponse.getStatus().toString();
+      //if (dbResponse.getStatus() == Status.SUCCESS) {
+      //  mediatorLiveData.removeSource(dbSource);
+      //  responseLiveData.postValue(dbResponse);
+      //
+      //  mediatorLiveData.addSource(serviceSource, serviceResponse -> {
+      //    mediatorLiveData.removeSource(serviceSource);
+      //    if (serviceResponse.getStatus() == Status.SUCCESS) {
+      //      Object object = serviceResponse.getObj();
+      //      if (object != null) {
+      //        List<Memo> memoList = (List<Memo>) object;
+      //        //db.memoDao().insert(EntityUtil.transform(memoList));
+      //        responseLiveData.postValue(new ApiResponse(memoList, Status.SUCCESS));
+      //      }
+      //    } else {
+      //      responseLiveData.postValue(new ApiResponse(null, Status.FAIL));
+      //    }
+      //  });
+      //} else {
+      //  responseLiveData.postValue(new ApiResponse(null, Status.FAIL));
+      //}
+    });
+    dbSource.setValue(new ApiResponse(null, Status.SUCCESS));
+    return mediatorLiveData;
+  }
+
+  private MutableLiveData<ApiResponse> loadMemosFromLocal() {
+    MutableLiveData<ApiResponse> result = new MutableLiveData<>();
+    result.setValue(new ApiResponse(null, Status.SUCCESS));
+    return result;
+    //return Transformations.map(db.memoDao().loadMemos(),
+    //    input -> {
+    //      List<Memo> memoList = EntityUtil.map(input);
+    //      return new ApiResponse(memoList, Status.SUCCESS);
+    //    });
   }
 }
