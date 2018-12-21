@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import me.dara.memoapp.R;
 import me.dara.memoapp.ui.MainActivity;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author sardor
@@ -15,7 +14,7 @@ public final class AuthActivity extends AppCompatActivity implements AuthCallbac
 
   Fragment register, login;
 
-  protected void onCreate(@Nullable Bundle savedInstanceState) {
+  protected void onCreate( Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_auth);
     register = new RegisterFragment();

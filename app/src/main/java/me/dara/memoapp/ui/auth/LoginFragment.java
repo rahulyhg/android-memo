@@ -81,10 +81,16 @@ public class LoginFragment extends Fragment {
   void login(String email, String password) {
     progress.show(getChildFragmentManager(), "ProgressDialog");
     viewModel.signIn(email, password).observe(getViewLifecycleOwner(), response -> {
+      progress.dismiss();
       if (response.getStatus() == Status.SUCCESS) {
         callback.loginSuccess();
       } else {
-        Toast.makeText(requireContext(), R.string.email_or_password_wrong, Toast.LENGTH_LONG).show();
+        Object obj = response.getObj();
+        int msgId = R.string.email_or_password_wrong;
+        if (obj != null) {
+          msgId = (Integer) obj;
+        }
+        Toast.makeText(requireContext(), msgId, Toast.LENGTH_LONG).show();
       }
     });
   }

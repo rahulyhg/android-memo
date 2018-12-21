@@ -1,18 +1,18 @@
 package me.dara.memoapp;
 
+import me.dara.memoapp.file.FileManager;
 import me.dara.memoapp.network.MemoService;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sardor
  */
 public final class AppModule {
 
-  @NotNull
-  public MemoService webService;
+  public MemoService memoService;
+  public FileManager fileManager;
 
-
-  public AppModule(@NotNull MemoService webService) {
-    this.webService = webService;
+  public AppModule(MemoService memoService, FileManager fileManager) {
+    this.memoService = memoService;
+    this.fileManager = fileManager;
   }
 }

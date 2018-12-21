@@ -92,6 +92,7 @@ public class ImageUtil {
       int rotation = getRotation(context, selectedImage, isCamera);
       bm = rotate(bm, rotation);
     }
+
     return bm;
   }
 

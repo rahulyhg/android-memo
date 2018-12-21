@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import java.io.ByteArrayOutputStream;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sardor
@@ -19,7 +18,7 @@ public final class User {
   @Exclude
   public Bitmap photoBitmap;
 
-  public User(@NotNull String email, @NotNull String password, @NotNull String photoUrl,
+  public User( String email,  String password,  String photoUrl,
       String uid) {
     this.email = email;
     this.password = password;
