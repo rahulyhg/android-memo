@@ -12,30 +12,18 @@ import java.io.ByteArrayOutputStream;
 public final class User {
   public String email;
   public String password;
-  public String photoUrl;
   public String uid;
 
-  @Exclude
-  public Bitmap photoBitmap;
 
-  public User( String email,  String password,  String photoUrl,
+  public User( String email,  String password,
       String uid) {
     this.email = email;
     this.password = password;
-    this.photoUrl = photoUrl;
     this.uid = uid;
   }
 
   public User() {
-    this("", "", "", "");
+    this("", "", "");
   }
 
-  @Exclude
-  public byte[] getByteOfBitmap() {
-    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    if (photoBitmap != null) {
-      photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-    }
-    return bos.toByteArray();
-  }
 }

@@ -95,35 +95,20 @@ public final class MemoService {
           user.sendEmailVerification().addOnCompleteListener(emailTask -> {
             if (emailTask.isSuccessful()) {
               nUser.uid = user.getUid();
-              StorageMetadata metadata = new StorageMetadata.Builder()
-                  .setContentType("image/jpg")
-                  .build();
-              StorageReference avtarRef =
-                  storageRef.child(
-                      "/user/thumbnails/"
-                          + nUser.uid + "/" + nUser.uid.toLowerCase() + "avatar_url.jpg");
-              avtarRef.putBytes(nUser.getByteOfBitmap(), metadata).addOnCompleteListener(
-                  avatarTask -> {
-                    if (avatarTask.isSuccessful()) {
-                      nUser.photoUrl = avatarTask.getResult().getMetadata().getPath();
-                      dbReference.child("users")
-                          .child(user.getUid().toLowerCase())
-                          .setValue(user)
-                          .addOnCompleteListener(
-                              userSaveTask -> {
-                                if (userSaveTask.isSuccessful()) {
-                                  userLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
-                                } else {
-                                  userLiveData.setValue(new ApiResponse(null, Status.FAIL));
-                                  Log.i(MemoService.class.getName(),
-                                      "Failed to saving user into DB");
-                                }
-                              });
-                    } else {
-                      Log.i(MemoService.class.getName(), "Failed to upload avatar");
-                      userLiveData.setValue(new ApiResponse(null, Status.FAIL));
-                    }
-                  });
+
+              dbReference.child("users")
+                  .child(user.getUid().toLowerCase())
+                  .setValue(user)
+                  .addOnCompleteListener(
+                      userSaveTask -> {
+                        if (userSaveTask.isSuccessful()) {
+                          userLiveData.setValue(new ApiResponse(null, Status.SUCCESS));
+                        } else {
+                          userLiveData.setValue(new ApiResponse(null, Status.FAIL));
+                          Log.i(MemoService.class.getName(),
+                              "Failed to saving user into DB");
+                        }
+                      });
             } else {
               Log.i(MemoService.class.getName(), "Failed sending email");
               userLiveData.setValue(new ApiResponse(null, Status.FAIL));
@@ -189,7 +174,6 @@ public final class MemoService {
     }
     return memoLiveData;
   }
-
 
   private MutableLiveData<ApiResponse> loadMemosFromService() {
     MutableLiveData<ApiResponse> memoLiveData = new MutableLiveData<>();

@@ -72,7 +72,7 @@ public class FileManager {
     return null;
   }
 
-  public File saveFile(Bitmap bitmap,String name) {
+  public File saveFile(Bitmap bitmap, String name) {
     if (bitmap == null) {
       return null;
     }
@@ -81,6 +81,18 @@ public class FileManager {
     return saveFile(FilePath.UPLOAD, bos.toByteArray(), name);
   }
 
+  public void deleteAllFiles() {
+    deleteFile(uploadFile);
+  }
+
+  private void deleteFile(File dir) {
+    if (dir.isDirectory()) {
+      for (File file : dir.listFiles()) {
+        deleteFile(file);
+      }
+    }
+    dir.delete();
+  }
 }
 
 

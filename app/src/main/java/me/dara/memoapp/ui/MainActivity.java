@@ -1,5 +1,6 @@
 package me.dara.memoapp.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements MemoCallback {
     setContentView(R.layout.activity_main);
     memoList = new MemoListFragment();
     replaceFragment(memoList, MEMO_LIST_FRAGMENT);
-
   }
 
   @Override public void onMemoCreated() {
@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements MemoCallback {
     ((MemoCreateFragment) memoCreate).memoId = id;
     addFragment(memoCreate, MEMO_CREATE_FRAGMENT);
   }
-
-
 
   public void addFragment(Fragment fragment, String tag) {
     getSupportFragmentManager().beginTransaction()
@@ -70,5 +68,11 @@ public class MainActivity extends AppCompatActivity implements MemoCallback {
 
   @Override public void onCreateMemo() {
     addFragment(new MemoCreateFragment(), MEMO_CREATE_FRAGMENT);
+  }
+
+  @Override public void exitToApp() {
+    Intent intent = new Intent(this, LauncherActivity.class);
+    startActivity(intent);
+    finish();
   }
 }

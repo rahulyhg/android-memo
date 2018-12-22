@@ -23,7 +23,6 @@ public final class AuthActivity extends AppCompatActivity implements AuthCallbac
     this.getSupportFragmentManager()
         .beginTransaction()
         .replace(R.id.frame_auth, login)
-        .addToBackStack(null)
         .commit();
   }
 

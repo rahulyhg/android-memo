@@ -31,9 +31,11 @@
     <string name="memo_description_error">Fill the description</string>
     <string name="memo_date_error">Set date</string>
     <string name="memo_img_error">Choose image</string>
-    <string name="memo_create_exit_title">Warning</string>
+    <string name="warning">Warning</string>
     <string name="memo_create_exit_msg">All changes is going to be discarded. Are you sure you want to discard?</string>
     <string name="yes">Yes</string>
     <string name="memo_does_not_changed">Memo does not changed</string>
+    <string name="exit_app">Exit</string>
+    <string name="exit_msg">Are you sure want to exit from the Memo app?</string>
 
 </resources>

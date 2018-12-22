@@ -14,4 +14,6 @@ public interface MemoCallback {
   void onBackPressed();
 
   void onCreateMemo();
+
+  void exitToApp();
 }

@@ -43,12 +43,6 @@ public class RegisterFragment extends Fragment {
     callback = (AuthCallback) context;
   }
 
-  @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    if (requestCode == 1000) {
-      Bitmap bmp = ImageUtil.getImageFromResult(requireContext(), resultCode, data);
-      binding.imgRegister.setImageBitmap(bmp);
-    }
-  }
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -72,18 +66,8 @@ public class RegisterFragment extends Fragment {
       String password = binding.editRegisterPassword.getText().toString();
       String confirmPassword = binding.editConfirmPassword.getText().toString();
       if (validateInput(email, password, confirmPassword)) {
-        Bitmap bitmap = null;
-        try {
-          bitmap = ((BitmapDrawable) binding.imgRegister.getDrawable()).getBitmap();
-        }catch (ClassCastException e){
-          Log.i(RegisterFragment.class.getName(),e.getLocalizedMessage());
-        }
-        signUp(email, password, bitmap);
+        signUp(email, password);
       }
-    });
-    binding.imgRegister.setOnClickListener(v -> {
-
-      startActivityForResult(ImageUtil.getPickImageIntent(requireContext()), 1000);
     });
 
     binding.editConfirmPassword.addTextChangedListener(new FormTextWatcher() {
@@ -110,9 +94,8 @@ public class RegisterFragment extends Fragment {
     });
   }
 
-  private void signUp(String email, String password, Bitmap bmp) {
-    User user = new User(email, password, "", "");
-    user.photoBitmap = bmp;
+  private void signUp(String email, String password) {
+    User user = new User(email, password, "");
     progress.show(getChildFragmentManager(), "ProgressDialog");
     viewModel.signUp(user).observe(
         getViewLifecycleOwner(), response -> {
@@ -156,6 +139,5 @@ public class RegisterFragment extends Fragment {
     binding.editConfirmPassword.setText("");
     binding.editRegisterPassword.setText("");
     binding.editRegisterEmail.setText("");
-    binding.imgRegister.setImageResource(R.drawable.ic_person);
   }
 }

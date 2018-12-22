@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.Calendar;
 import me.dara.memoapp.R;
 import me.dara.memoapp.databinding.FragmentMemoCreateBinding;
+import me.dara.memoapp.file.FilePath;
 import me.dara.memoapp.network.model.Memo;
 import me.dara.memoapp.network.model.Status;
 import me.dara.memoapp.ui.MainActivityViewModel;
@@ -69,24 +70,15 @@ public class MemoCreateFragment extends Fragment {
   }
 
   public void showWarning() {
-    String title = binding.editMemoTitle.getText().toString();
-    String descrption = binding.editMemo.getText().toString();
-    memo.title = title;
-    memo.description = descrption;
-    if (viewModel.isChanged(memo)) {
-      Alert alert = Alert.newInstance(getResources().getString(R.string.memo_create_exit_title),
-          getResources().getString(R.string.memo_create_exit_msg));
-      alert.listener = () -> {
-        memoId = -1L;
-        memo = null;
-        callback.onBackPressed();
-      };
-      alert.count = 2;
-      alert.show(getChildFragmentManager(), "Alert");
-    } else {
+    Alert alert = Alert.newInstance(getResources().getString(R.string.warning),
+        getResources().getString(R.string.memo_create_exit_msg));
+    alert.listener = () -> {
+      memoId = -1L;
       memo = null;
       callback.onBackPressed();
-    }
+    };
+    alert.count = 2;
+    alert.show(getChildFragmentManager(), "Alert");
   }
 
   @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -136,6 +128,9 @@ public class MemoCreateFragment extends Fragment {
                 new File(Uri.parse(localMemo.downloadUrl).getLastPathSegment()).getName();
             binding.imgMemo.setImageBitmap(bitmap);
             viewModel.saveFile(bitmap, filename);
+            binding.imgMemo.setTag(
+                viewModel.module.fileManager.getFileByName(FilePath.UPLOAD, filename)
+                    .getAbsoluteFile());
           }
 
           @Override public void onBitmapFailed(Exception e, Drawable errorDrawable) {
@@ -156,7 +151,11 @@ public class MemoCreateFragment extends Fragment {
       memo.description = description;
       memo.createdTime = localMemo.createdTime;
       memo.id = localMemo.id;
-      binding.imgMemo.setTag(viewModel.getFilePath(localMemo.getFile()));
+      try {
+        binding.imgMemo.setTag(viewModel.getFilePath(localMemo.getFile()));
+      } catch (NullPointerException e) {
+        binding.imgMemo.setTag("");
+      }
     }
   }
 
@@ -164,21 +163,17 @@ public class MemoCreateFragment extends Fragment {
     if (memo.id == null) {
       memo.id = memo.createdTime;
     }
-    if (viewModel.isChanged(memo)) {
-      memo.downloadUrl = (String) binding.imgMemo.getTag();
-      progress.show(getChildFragmentManager(), "Progress");
-      viewModel.postMemo(memo).observe(getViewLifecycleOwner(), response -> {
-        progress.dismiss();
-        if (response.getStatus() == Status.SUCCESS) {
-          callback.onMemoCreated();
-          Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG).show();
-        } else {
-          Toast.makeText(requireContext(), R.string.memo_create_error, Toast.LENGTH_LONG).show();
-        }
-      });
-    } else {
-      Toast.makeText(requireContext(), R.string.memo_does_not_changed, Toast.LENGTH_LONG).show();
-    }
+    memo.downloadUrl = (String) binding.imgMemo.getTag();
+    progress.show(getChildFragmentManager(), "Progress");
+    viewModel.postMemo(memo).observe(getViewLifecycleOwner(), response -> {
+      progress.dismiss();
+      if (response.getStatus() == Status.SUCCESS) {
+        callback.onMemoCreated();
+        Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG).show();
+      } else {
+        Toast.makeText(requireContext(), R.string.memo_create_error, Toast.LENGTH_LONG).show();
+      }
+    });
   }
 
   public Boolean validateMemo() {

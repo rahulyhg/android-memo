@@ -22,4 +22,7 @@ public abstract class MemoDao {
 
   @Query("SELECT * FROM memo WHERE id =:id")
   public abstract MemoEntity loadMemo(Long id);
+
+  @Query("DELETE FROM memo")
+  public abstract void delete();
 }

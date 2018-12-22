@@ -99,18 +99,33 @@ public class MainActivityViewModel extends AndroidViewModel {
   }
 
   public String getFilePath(File file) {
-    File file1 = module.fileManager.getFileByName(FilePath.UPLOAD, file.getName());
-    return file1.getAbsolutePath();
+    try {
+      File file1 = module.fileManager.getFileByName(FilePath.UPLOAD, file.getName());
+      return file1.getAbsolutePath();
+    } catch (Throwable throwable) {
+      return "";
+    }
   }
 
   public boolean isChanged(Memo memo) {
 
     Memo localMemo = loadMemo(memo.id);
     if (localMemo == null) {
-      return false;
+      return true;
     }
     int hash1 = localMemo.hashCode();
     int hash2 = memo.hashCode();
     return hash1 != hash2;
+  }
+
+  public LiveData<Object> exit() {
+    MutableLiveData<Object> liveData = new MutableLiveData<Object>();
+    module.executors.IO.execute(() -> {
+      module.fileManager.deleteAllFiles();
+      module.db.memoDao().delete();
+      FirebaseAuth.getInstance().signOut();
+      liveData.postValue(1);
+    });
+    return liveData;
   }
 }
