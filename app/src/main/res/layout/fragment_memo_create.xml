@@ -11,22 +11,24 @@
             name="user" type="me.dara.memoapp.network.model.User"/>
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@android:color/white"
+        android:gravity="center_horizontal"
         android:clickable="false"
         >
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/memo_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarMemoCreate"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="wrap_content"
                 app:navigationIcon="@drawable/ic_close"
                 >
 
@@ -34,7 +36,8 @@
                     android:id="@+id/editMemoTitle"
                     android:hint="@string/memo_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:textSize="28sp"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     />
 
@@ -43,34 +46,72 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imgMemo"
-            android:layout_width="164dp"
-            android:layout_height="164dp"
-            android:src="@drawable/ic_camera"
-            />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editMemo"
-            android:hint="@string/mem_description"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/memo_app_bar"
+            >
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/dateMemo"
-            android:text="@string/date_mem"
-            android:layout_width="wrap_content"
-            android:padding="10dp"
-            android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgMemo"
+                android:layout_width="164dp"
+                android:layout_height="164dp"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_camera"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/ic_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dateMemo"
+                    android:text="@string/date_mem"
+                    android:layout_width="wrap_content"
+                    android:padding="16dp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editMemo"
+                android:hint="@string/mem_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_background"
+                android:layout_margin="15dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingBottom="25dp"
+                android:paddingTop="10dp"
+                />
+
+        </LinearLayout>
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCreateMem"
             android:text="@string/create"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_gravity="bottom"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:background="@color/colorPrimary"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
             android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </layout>

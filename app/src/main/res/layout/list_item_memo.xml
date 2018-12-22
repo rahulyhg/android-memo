@@ -4,9 +4,12 @@
     android:orientation="vertical"
     android:id="@+id/linear_memo_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:background="?attr/selectableItemBackground"
+    >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -14,38 +17,50 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/img_memo"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             tools:src="@drawable/ic_camera"
-            />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text_memo_title"
-            tools:text="THis is text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text_memo_description"
-            tools:text="THis is text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text_memo_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date"
+            android:scaleType="centerCrop"
+            android:layout_margin="5dp"
             />
 
         <LinearLayout
-            android:id="@+id/linear_todo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            />
+            android:layout_toEndOf="@+id/img_memo"
+            android:layout_toRightOf="@+id/img_memo"
+            android:layout_centerVertical="true"
+            >
 
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_memo_title"
+                tools:text="THis is text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_memo_description"
+                tools:text="THis is text"
+
+                android:layout_width="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_memo_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="December 20, 18:00Pm"
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
 
 </androidx.cardview.widget.CardView>

@@ -69,7 +69,10 @@ public class MemoCreateFragment extends Fragment {
   }
 
   public void showWarning() {
-    validateMemo();
+    String title = binding.editMemoTitle.getText().toString();
+    String descrption = binding.editMemo.getText().toString();
+    memo.title = title;
+    memo.description = descrption;
     if (viewModel.isChanged(memo)) {
       Alert alert = Alert.newInstance(getResources().getString(R.string.memo_create_exit_title),
           getResources().getString(R.string.memo_create_exit_msg));

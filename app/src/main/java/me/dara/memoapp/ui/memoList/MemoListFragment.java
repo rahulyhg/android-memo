@@ -49,6 +49,7 @@ public class MemoListFragment extends Fragment {
     binding.recyclerMemo.setAdapter(adapter);
     binding.recyclerMemo.setLayoutManager(new LinearLayoutManager(requireContext()));
     binding.swipeMemo.setOnRefreshListener(this::loadMemos);
+    binding.fab.setOnClickListener(v -> callback.onCreateMemo());
     loadMemos();
   }
 

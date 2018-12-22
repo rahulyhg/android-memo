@@ -15,4 +15,5 @@
     <color name="colorFeedback">#efb542</color>
     <color name="colorPlayMode">#5789a1</color>
     <color name="colorPlaySpeed">#ba6666</color>
+    <color name="colorGray">#e1e1e1</color>
 </resources>

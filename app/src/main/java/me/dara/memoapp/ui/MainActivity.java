@@ -25,9 +25,7 @@ public class MainActivity extends AppCompatActivity implements MemoCallback {
     setContentView(R.layout.activity_main);
     memoList = new MemoListFragment();
     replaceFragment(memoList, MEMO_LIST_FRAGMENT);
-    findViewById(R.id.fab).setOnClickListener(v -> {
-      addFragment(new MemoCreateFragment(), MEMO_CREATE_FRAGMENT);
-    });
+
   }
 
   @Override public void onMemoCreated() {
@@ -40,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements MemoCallback {
     ((MemoCreateFragment) memoCreate).memoId = id;
     addFragment(memoCreate, MEMO_CREATE_FRAGMENT);
   }
+
+
 
   public void addFragment(Fragment fragment, String tag) {
     getSupportFragmentManager().beginTransaction()
@@ -66,5 +66,9 @@ public class MainActivity extends AppCompatActivity implements MemoCallback {
     } else {
       super.onBackPressed();
     }
+  }
+
+  @Override public void onCreateMemo() {
+    addFragment(new MemoCreateFragment(), MEMO_CREATE_FRAGMENT);
   }
 }

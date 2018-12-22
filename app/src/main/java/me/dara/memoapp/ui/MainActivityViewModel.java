@@ -104,7 +104,11 @@ public class MainActivityViewModel extends AndroidViewModel {
   }
 
   public boolean isChanged(Memo memo) {
+
     Memo localMemo = loadMemo(memo.id);
+    if (localMemo == null) {
+      return false;
+    }
     int hash1 = localMemo.hashCode();
     int hash2 = memo.hashCode();
     return hash1 != hash2;

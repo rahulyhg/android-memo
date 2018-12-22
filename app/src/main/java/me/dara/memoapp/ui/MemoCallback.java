@@ -12,4 +12,6 @@ public interface MemoCallback {
   void onMemoClicked(Long id);
 
   void onBackPressed();
+
+  void onCreateMemo();
 }

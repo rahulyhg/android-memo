@@ -25,7 +25,7 @@ public class EntityUtil {
 
   public static Memo map(MemoEntity entity) {
     return new Memo(entity.title, entity.description, entity.createdTime,
-        entity.downloadUrl,entity.id);
+        entity.downloadUrl, entity.id);
   }
 
   public static MemoEntity map(Memo memo) {
@@ -75,7 +75,8 @@ public class EntityUtil {
     memoProvider.description = memo.description;
     memoProvider.title = memo.title;
     memoProvider.createdAt =
-        DateUtils.formatDateTime(context, memo.createdTime, DateUtils.FORMAT_SHOW_TIME);
+        DateUtils.formatDateTime(context, memo.createdTime,
+            DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE);
     if (localFile != null) {
       memoProvider.isDownloadedFile = true;
       providerUrl = localFile.getAbsolutePath();
