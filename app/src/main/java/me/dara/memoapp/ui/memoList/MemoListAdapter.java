@@ -24,24 +24,30 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoViewHolder> {
     this.callback = callback;
     this.fileManager = fileManager;
   }
+  //
+  //public void add(MemoProvider memo) {
+  //  list.add(memo);
+  //  notifyItemChanged(getItemCount());
+  //}
 
-  public void add(MemoProvider memo) {
-    list.add(memo);
-    notifyItemChanged(getItemCount());
-  }
-
-  public void add(List<MemoProvider> subList) {
-    int changedPosition = list.size();
+  public void update(List<MemoProvider> subList) {
+    list.clear();
     list.addAll(subList);
-    notifyItemRangeChanged(changedPosition, getItemCount());
+    notifyDataSetChanged();
   }
+
+  //public void add(List<MemoProvider> subList) {
+  //  int changedPosition = list.size();
+  //  list.addAll(subList);
+  //  notifyItemRangeChanged(changedPosition, getItemCount());
+  //}
 
   @NonNull @Override
   public MemoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view =
         LayoutInflater.from(parent.getContext()).
             inflate(R.layout.list_item_memo, parent, false);
-    return new MemoViewHolder(view, callback,fileManager);
+    return new MemoViewHolder(view, callback, fileManager);
   }
 
   @Override public void onBindViewHolder(@NonNull MemoViewHolder holder, int position) {

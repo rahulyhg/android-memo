@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import java.util.List;
+import me.dara.memoapp.network.model.Memo;
 
 /**
  * @author sardor
@@ -18,4 +19,7 @@ public abstract class MemoDao {
 
   @Query("SELECT * FROM memo")
   public abstract LiveData<List<MemoEntity>> loadMemos();
+
+  @Query("SELECT * FROM memo WHERE id =:id")
+  public abstract MemoEntity loadMemo(Long id);
 }

@@ -38,8 +38,6 @@ public class FileManager {
     } else {
       file = new File(thumbnail, fileName);
     }
-    if (!file.exists())
-      file.mkdir();
     try {
       FileOutputStream fos = new FileOutputStream(file);
       fos.write(data);

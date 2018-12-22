@@ -3,6 +3,7 @@ package me.dara.memoapp.ui;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.SystemClock;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import me.dara.memoapp.AppModule;
 import me.dara.memoapp.MemoApp;
 import me.dara.memoapp.db.EntityUtil;
@@ -70,5 +73,40 @@ public class MainActivityViewModel extends AndroidViewModel {
           }
           return input;
         });
+  }
+
+  public Memo loadMemo(Long id) {
+    try {
+      return module.executors.IO.submit(() -> {
+        Memo memo = EntityUtil.map(module.db.memoDao().loadMemo(id));
+
+        File file = module.fileManager.getFileByName(FilePath.UPLOAD, memo.getFile().getName());
+        if (file != null) {
+          memo.imgBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        }
+        return memo;
+      }).get();
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public void saveFile(Bitmap bitmap, String fileName) {
+    module.fileManager.saveFile(bitmap, fileName);
+  }
+
+  public String getFilePath(File file) {
+    File file1 = module.fileManager.getFileByName(FilePath.UPLOAD, file.getName());
+    return file1.getAbsolutePath();
+  }
+
+  public boolean isChanged(Memo memo) {
+    Memo localMemo = loadMemo(memo.id);
+    int hash1 = localMemo.hashCode();
+    int hash2 = memo.hashCode();
+    return hash1 != hash2;
   }
 }

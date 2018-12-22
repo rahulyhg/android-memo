@@ -27,9 +27,13 @@
     <string name="memo_title">Title</string>
     <string name="email_not_verified">Email not verified</string>
     <string name="memo_create_error">Memo creation error</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="memo_title_error">Fill the title</string>
+    <string name="memo_description_error">Fill the description</string>
+    <string name="memo_date_error">Set date</string>
+    <string name="memo_img_error">Choose image</string>
+    <string name="memo_create_exit_title">Warning</string>
+    <string name="memo_create_exit_msg">All changes is going to be discarded. Are you sure you want to discard?</string>
+    <string name="yes">Yes</string>
+    <string name="memo_does_not_changed">Memo does not changed</string>
 
 </resources>

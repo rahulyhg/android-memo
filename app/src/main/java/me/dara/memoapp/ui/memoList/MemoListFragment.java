@@ -52,12 +52,14 @@ public class MemoListFragment extends Fragment {
     loadMemos();
   }
 
+
+
   public void loadMemos() {
     binding.swipeMemo.setRefreshing(true);
     viewModel.loadMemos().observe(getViewLifecycleOwner(), response -> {
       binding.swipeMemo.setRefreshing(false);
       if (response.getStatus() == Status.SUCCESS) {
-        adapter.add((List<MemoProvider>) response.getObj());
+        adapter.update((List<MemoProvider>) response.getObj());
       } else {
         Toast.makeText(requireContext(), R.string.memo_create_error, Toast.LENGTH_SHORT).show();
       }

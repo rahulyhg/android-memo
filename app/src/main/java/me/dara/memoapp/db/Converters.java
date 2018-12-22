@@ -19,21 +19,21 @@ public class Converters {
   @TypeConverter
   public static Map<String, Boolean> toMap(String str) {
     Map<String, Boolean> result = new HashMap<>();
-    List<Object> objectList = Arrays.asList((str.split("\\s*,\\s*")));
-    List<String> keys = new ArrayList<>();
-    List<Boolean> values = new ArrayList<>();
-    int count = objectList.size();
-    int booleanIndex = count / 2;
-    for (int i = 0; i < count; i++) {
-      if (i >= booleanIndex) {
-        values.add(Boolean.parseBoolean(objectList.get(i).toString()));
-      } else {
-        keys.add(objectList.get(i).toString());
-      }
-    }
-    for (int i = 0, j = 0; i < keys.size(); i++, j++) {
-      result.put(keys.get(i), values.get(j));
-    }
+    //List<Object> objectList = Arrays.asList((str.split("\\s*,\\s*")));
+    //List<String> keys = new ArrayList<>();
+    //List<Boolean> values = new ArrayList<>();
+    //int count = objectList.size();
+    //int booleanIndex = count / 2;
+    //for (int i = 0; i < count; i++) {
+    //  if (i >= booleanIndex) {
+    //    values.add(Boolean.parseBoolean(objectList.get(i).toString()));
+    //  } else {
+    //    keys.add(objectList.get(i).toString());
+    //  }
+    //}
+    //for (int i = 0, j = 0; i < keys.size(); i++, j++) {
+    //  result.put(keys.get(i), values.get(j));
+    //}
     return result;
   }
 

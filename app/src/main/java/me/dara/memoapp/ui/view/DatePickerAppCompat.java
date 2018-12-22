@@ -13,7 +13,7 @@ import me.dara.memoapp.R;
  * @author sardor
  */
 public class DatePickerAppCompat extends AppCompatDialogFragment {
-  DatePickerDialog.OnDateSetListener listener;
+  public DatePickerDialog.OnDateSetListener listener;
 
   @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 

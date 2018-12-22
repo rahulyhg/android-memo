@@ -9,7 +9,7 @@ import com.google.firebase.storage.StorageReference;
 public interface MemoCallback {
   void onMemoCreated();
 
-  void onMemoClicked(long id);
+  void onMemoClicked(Long id);
 
-  void loadImg(StorageReference reference, ImageView imageView);
+  void onBackPressed();
 }

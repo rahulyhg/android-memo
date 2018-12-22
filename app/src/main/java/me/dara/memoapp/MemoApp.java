@@ -18,7 +18,7 @@ public final class MemoApp extends Application {
     FileManager fileManager = new FileManager(getApplicationContext());
     MemoDb db = MemoDb.getInstance(getApplicationContext());
     AppExecutors executors = new AppExecutors();
-    MemoService webService = new MemoService(db,executors);
-    appModule = new AppModule(webService, fileManager, db);
+    MemoService webService = new MemoService(db, executors);
+    appModule = new AppModule(webService, fileManager, db, executors);
   }
 }

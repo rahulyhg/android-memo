@@ -2,15 +2,9 @@ package me.dara.memoapp.db;
 
 import android.content.Context;
 import android.text.format.DateUtils;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import me.dara.memoapp.file.FileManager;
 import me.dara.memoapp.file.FilePath;
 import me.dara.memoapp.network.model.Memo;
@@ -30,13 +24,13 @@ public class EntityUtil {
   }
 
   public static Memo map(MemoEntity entity) {
-    return new Memo(entity.todoList, entity.title, entity.description, entity.createdTime,
-        entity.downloadUrl);
+    return new Memo(entity.title, entity.description, entity.createdTime,
+        entity.downloadUrl,entity.id);
   }
 
   public static MemoEntity map(Memo memo) {
-    return new MemoEntity(memo.todoList, memo.title, memo.description, memo.createdTime,
-        memo.downloadUrl);
+    return new MemoEntity(memo.title, memo.description, memo.createdTime,
+        memo.downloadUrl, memo.id);
   }
 
   public static List<MemoEntity> transform(List<Memo> list) {
@@ -57,27 +51,26 @@ public class EntityUtil {
   }
 
   public static MemoProvider providerFrom(Memo memo, Context context, FileManager fileManager) {
-    LinearLayout linearLayout = new LinearLayout(context);
-    LinearLayout.LayoutParams params =
-        new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT);
-    linearLayout.setLayoutParams(params);
-    linearLayout.setOrientation(LinearLayout.VERTICAL);
-    for (Map.Entry<String, Boolean> entry : memo.todoList.entrySet()) {
-      CheckBox todo = new CheckBox(context);
-      todo.setLayoutParams(params);
-      todo.setEnabled(false);
-      todo.setChecked(entry.getValue());
-      todo.setText(entry.getKey());
-      linearLayout.addView(todo);
-    }
+    //LinearLayout linearLayout = new LinearLayout(context);
+    //LinearLayout.LayoutParams params =
+    //    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+    //        ViewGroup.LayoutParams.WRAP_CONTENT);
+    //linearLayout.setLayoutParams(params);
+    //linearLayout.setOrientation(LinearLayout.VERTICAL);
+    //for (Map.Entry<String, Boolean> entry : memo.todoList.entrySet()) {
+    //  CheckBox todocheck = new CheckBox(context);
+    //  todocheck.setLayoutParams(params);
+    //  todocheck.setEnabled(false);
+    //  todocheck.setChecked(entry.getValue());
+    //  todocheck.setText(entry.getKey());
+    //  linearLayout.addView(todocheck);
+    //}
 
-    String fileName = "/" + memo.getFile().getName();
+    String fileName = memo.getFile().getName();
     File localFile = fileManager.getFileByName(FilePath.UPLOAD, fileName);
     String providerUrl = "";
 
     MemoProvider memoProvider = new MemoProvider();
-    memoProvider.todoView = linearLayout;
     memoProvider.id = memo.id;
     memoProvider.description = memo.description;
     memoProvider.title = memo.title;
@@ -89,10 +82,7 @@ public class EntityUtil {
       memoProvider.downloadUrl = providerUrl;
     } else {
       memoProvider.isDownloadedFile = false;
-      StorageReference reference = FirebaseStorage.getInstance()
-          .getReference(
-          memo.getFile().getAbsolutePath());
-      memoProvider.fileReference = reference;
+      memoProvider.downloadUrl = memo.downloadUrl;
     }
     return memoProvider;
   }

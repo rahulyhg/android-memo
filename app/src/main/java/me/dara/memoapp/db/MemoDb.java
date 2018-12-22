@@ -4,14 +4,11 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
-import me.dara.memoapp.MemoApp;
 
 /**
  * @author sardor
  */
 @Database(entities = {MemoEntity.class}, version = 1,exportSchema = false)
-@TypeConverters({Converters.class})
 public abstract class MemoDb extends RoomDatabase {
 
   public abstract MemoDao memoDao();
