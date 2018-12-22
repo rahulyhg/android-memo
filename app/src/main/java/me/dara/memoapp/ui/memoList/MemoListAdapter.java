@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import me.dara.memoapp.R;
+import me.dara.memoapp.file.FileManager;
 import me.dara.memoapp.network.model.Memo;
 import me.dara.memoapp.ui.MemoCallback;
 
@@ -15,19 +16,21 @@ import me.dara.memoapp.ui.MemoCallback;
  * @author sardor
  */
 public class MemoListAdapter extends RecyclerView.Adapter<MemoViewHolder> {
-  List<Memo> list = new ArrayList<>();
+  List<MemoProvider> list = new ArrayList<>();
   MemoCallback callback;
+  FileManager fileManager;
 
-  public MemoListAdapter(MemoCallback callback) {
+  public MemoListAdapter(MemoCallback callback, FileManager fileManager) {
     this.callback = callback;
+    this.fileManager = fileManager;
   }
 
-  public void add(Memo memo) {
+  public void add(MemoProvider memo) {
     list.add(memo);
     notifyItemChanged(getItemCount());
   }
 
-  public void add(List<Memo> subList) {
+  public void add(List<MemoProvider> subList) {
     int changedPosition = list.size();
     list.addAll(subList);
     notifyItemRangeChanged(changedPosition, getItemCount());
@@ -38,7 +41,7 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoViewHolder> {
     View view =
         LayoutInflater.from(parent.getContext()).
             inflate(R.layout.list_item_memo, parent, false);
-    return new MemoViewHolder(view, callback);
+    return new MemoViewHolder(view, callback,fileManager);
   }
 
   @Override public void onBindViewHolder(@NonNull MemoViewHolder holder, int position) {

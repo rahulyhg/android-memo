@@ -146,11 +146,12 @@ public final class MemoService {
       StorageMetadata metadata = new StorageMetadata.Builder()
           .setContentType("image/jpg")
           .build();
+
       StorageReference fileRef =
           storageRef.child(
               "/user/uploads/"
-                  + user.getUid() + "/" + memo.file.getName());
-      fileRef.putFile(Uri.fromFile(memo.file), metadata).addOnCompleteListener(
+                  + user.getUid() + "/" + memo.getFile().getName());
+      fileRef.putFile(Uri.fromFile(memo.getFile()), metadata).addOnCompleteListener(
           fileTask -> {
             if (fileTask.isSuccessful()) {
               Log.i(MemoService.class.getName(), "Memo file upload succeed");
@@ -220,7 +221,7 @@ public final class MemoService {
     mediatorLiveData.addSource(dbSource, dbResponse -> {
       if (dbResponse.getStatus() == Status.SUCCESS) {
         mediatorLiveData.removeSource(dbSource);
-        mediatorLiveData.postValue(dbResponse);
+        //mediatorLiveData.postValue(dbResponse);
         mediatorLiveData.addSource(serviceSource, serviceResponse -> {
           mediatorLiveData.removeSource(serviceSource);
           if (serviceResponse.getStatus() == Status.SUCCESS) {

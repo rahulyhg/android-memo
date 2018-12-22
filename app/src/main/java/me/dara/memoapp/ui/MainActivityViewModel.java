@@ -1,6 +1,7 @@
 package me.dara.memoapp.ui;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.SystemClock;
 import androidx.annotation.NonNull;
@@ -34,11 +35,13 @@ import me.dara.memoapp.network.model.Status;
  * @author sardor
  */
 public class MainActivityViewModel extends AndroidViewModel {
-  private final AppModule module;
+  public final AppModule module;
+  private MemoApp app;
 
   public MainActivityViewModel(@NonNull Application application) {
     super(application);
-    module = ((MemoApp) this.getApplication()).appModule;
+    app = getApplication();
+    module = app.appModule;
   }
 
   public LiveData<ApiResponse> postMemo(Memo memo) {
@@ -58,6 +61,14 @@ public class MainActivityViewModel extends AndroidViewModel {
   }
 
   public LiveData<ApiResponse> loadMemos() {
-    return module.memoService.loadMemos();
+    return Transformations.map(module.memoService.loadMemos(),
+        input -> {
+          if (input.getStatus() == Status.SUCCESS) {
+            List<Memo> memoList = (List<Memo>) input.getObj();
+            return new ApiResponse(EntityUtil.providerFrom(memoList, app.getApplicationContext(),
+                module.fileManager), Status.SUCCESS);
+          }
+          return input;
+        });
   }
 }

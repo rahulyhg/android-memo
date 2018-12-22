@@ -100,7 +100,7 @@ public class MemoCreateFragment extends Fragment {
     File file = ((File) binding.imgMemo.getTag());
     long created = System.currentTimeMillis();
     Memo memo = new Memo(map, "This is title " + dummyI, "This is description " + dummyI,
-        created, file);
+        created, file.getAbsolutePath());
     dummyI++;
     return memo;
   }

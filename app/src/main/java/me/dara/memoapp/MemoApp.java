@@ -1,6 +1,7 @@
 package me.dara.memoapp;
 
 import android.app.Application;
+import com.squareup.picasso.Picasso;
 import me.dara.memoapp.db.MemoDb;
 import me.dara.memoapp.file.FileManager;
 import me.dara.memoapp.network.MemoService;

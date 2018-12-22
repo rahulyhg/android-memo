@@ -20,22 +20,27 @@ public class Memo {
   public String description;
   public String downloadUrl;
 
-  @Exclude
-  public File file;
-
   public Memo() {
 
   }
 
   public Memo(Map<String, Boolean> todoList, String title, String description,
       Long createdTime,
-      File file) {
+      String downloadUrl) {
     this.id = createdTime;
     this.todoList = todoList;
     this.title = title;
     this.description = description;
     this.createdTime = createdTime;
-    this.file = file;
+    this.downloadUrl = downloadUrl;
+  }
+
+  @Exclude
+  public File getFile() {
+    if (downloadUrl == null) {
+      return null;
+    }
+    return new File(downloadUrl);
   }
 
   @Exclude

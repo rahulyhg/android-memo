@@ -3,6 +3,8 @@ package me.dara.memoapp.file;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
+import com.google.firebase.auth.FirebaseAuth;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,6 +38,8 @@ public class FileManager {
     } else {
       file = new File(thumbnail, fileName);
     }
+    if (!file.exists())
+      file.mkdir();
     try {
       FileOutputStream fos = new FileOutputStream(file);
       fos.write(data);
@@ -69,6 +73,16 @@ public class FileManager {
     }
     return null;
   }
+
+  public File saveFile(Bitmap bitmap,String name) {
+    if (bitmap == null) {
+      return null;
+    }
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+    return saveFile(FilePath.UPLOAD, bos.toByteArray(), name);
+  }
+
 }
 
 

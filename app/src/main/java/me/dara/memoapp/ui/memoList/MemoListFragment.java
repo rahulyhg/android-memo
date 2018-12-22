@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.List;
 import me.dara.memoapp.R;
 import me.dara.memoapp.databinding.FragmentMemoListBinding;
-import me.dara.memoapp.network.model.Memo;
 import me.dara.memoapp.network.model.Status;
 import me.dara.memoapp.ui.MainActivityViewModel;
 import me.dara.memoapp.ui.MemoCallback;
@@ -46,7 +45,7 @@ public class MemoListFragment extends Fragment {
   @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     viewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
-    adapter = new MemoListAdapter(callback);
+    adapter = new MemoListAdapter(callback, viewModel.module.fileManager);
     binding.recyclerMemo.setAdapter(adapter);
     binding.recyclerMemo.setLayoutManager(new LinearLayoutManager(requireContext()));
     binding.swipeMemo.setOnRefreshListener(this::loadMemos);
@@ -57,10 +56,10 @@ public class MemoListFragment extends Fragment {
     binding.swipeMemo.setRefreshing(true);
     viewModel.loadMemos().observe(getViewLifecycleOwner(), response -> {
       binding.swipeMemo.setRefreshing(false);
-      if (response.getStatus() == Status.SUCCESS){
-        adapter.add((List<Memo>) response.getObj());
-      }else{
-        Toast.makeText(requireContext(),R.string.memo_create_error,Toast.LENGTH_SHORT).show();
+      if (response.getStatus() == Status.SUCCESS) {
+        adapter.add((List<MemoProvider>) response.getObj());
+      } else {
+        Toast.makeText(requireContext(), R.string.memo_create_error, Toast.LENGTH_SHORT).show();
       }
     });
   }
