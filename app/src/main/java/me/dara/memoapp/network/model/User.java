@@ -6,7 +6,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.io.ByteArrayOutputStream;
 
 /**
- * @author sardor
+ * @author ulugbek
  */
 @IgnoreExtraProperties
 public final class User {

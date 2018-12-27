@@ -7,7 +7,12 @@ import me.dara.memoapp.file.FileManager;
 import me.dara.memoapp.network.MemoService;
 
 /**
- * @author sardor
+ * @author ulugbek
+ */
+
+/**
+ * Main class which is called once when application started and initializes all components of
+ * application
  */
 public final class MemoApp extends Application {
 

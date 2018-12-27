@@ -6,11 +6,13 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import java.util.List;
-import me.dara.memoapp.network.model.Memo;
 
 /**
- * @author sardor
+ * @author ulugbek
  */
+/**
+ * Memo model queries
+ * */
 @Dao
 public abstract class MemoDao {
 

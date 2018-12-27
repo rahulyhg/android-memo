@@ -6,8 +6,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 /**
- * @author sardor
+ * @author ulugbek
  */
+
+/**
+ * Database using Room library
+ * */
 @Database(entities = {MemoEntity.class}, version = 1,exportSchema = false)
 public abstract class MemoDb extends RoomDatabase {
 

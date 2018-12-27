@@ -12,6 +12,9 @@ import me.dara.memoapp.R;
 /**
  * @author sardor
  */
+/**
+ * Custom datePicker which support below 16 SDK
+ * */
 public class DatePickerAppCompat extends AppCompatDialogFragment {
   public DatePickerDialog.OnDateSetListener listener;
 

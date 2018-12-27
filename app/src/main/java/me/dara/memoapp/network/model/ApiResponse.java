@@ -3,8 +3,11 @@ package me.dara.memoapp.network.model;
 
 
 /**
- * @author sardor
+ * @author ulugbek
  */
+/**
+ * Base class for interpretating remote and local result to UI
+ * */
 public final class ApiResponse {
 
    private final Object obj;

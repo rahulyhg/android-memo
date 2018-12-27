@@ -8,9 +8,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,8 +21,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import me.dara.memoapp.AppExecutors;
 import me.dara.memoapp.R;
 import me.dara.memoapp.db.EntityUtil;
@@ -36,7 +31,11 @@ import me.dara.memoapp.network.model.Status;
 import me.dara.memoapp.network.model.User;
 
 /**
- * @author sardor
+ * @author ulugbek
+ */
+
+/**
+ * Networking class which works with FirebaseAuth, FirebaseStorage and FirebaseDatabase
  */
 public final class MemoService {
 
@@ -62,10 +61,12 @@ public final class MemoService {
     this.db = db;
   }
 
+  // Checking is user authenticated already or not
   public final boolean checkForAuth() {
     return auth.getCurrentUser() == null;
   }
 
+  // Method for user logging user to system
   @NonNull
   public final LiveData<ApiResponse> signIn(@NonNull String email, @NonNull String password) {
     final MutableLiveData<ApiResponse> signInLiveData = new MutableLiveData<>();
@@ -86,6 +87,7 @@ public final class MemoService {
     return signInLiveData;
   }
 
+  // Method for authorization new user to system
   public final MutableLiveData<ApiResponse> signUp(@NonNull User nUser) {
     final MutableLiveData<ApiResponse> userLiveData = new MutableLiveData<>();
     auth.createUserWithEmailAndPassword(nUser.email, nUser.password).addOnCompleteListener(task -> {
@@ -126,9 +128,7 @@ public final class MemoService {
     return userLiveData;
   }
 
-  public final void updateUser() {
-  }
-
+  // Method for creating new notes
   public final LiveData<ApiResponse> postMemo(Memo memo) {
     final MutableLiveData<ApiResponse> memoLiveData = new MutableLiveData<>();
     if (user != null) {
@@ -175,6 +175,7 @@ public final class MemoService {
     return memoLiveData;
   }
 
+  // Load notes from FirebaseDatabase
   private MutableLiveData<ApiResponse> loadMemosFromService() {
     MutableLiveData<ApiResponse> memoLiveData = new MutableLiveData<>();
     dbReference.child("memos/" + user.getUid().toLowerCase())
@@ -196,6 +197,7 @@ public final class MemoService {
     return memoLiveData;
   }
 
+  // Mixes two note's results from firebaseDataBase and RoomDatabase into one
   public LiveData<ApiResponse> loadMemos() {
     MediatorLiveData<ApiResponse> mediatorLiveData = new MediatorLiveData<>();
     LiveData<ApiResponse> dbSource = loadMemosFromLocal();
@@ -228,6 +230,7 @@ public final class MemoService {
     return mediatorLiveData;
   }
 
+  // Load notes from local database
   private LiveData<ApiResponse> loadMemosFromLocal() {
     return Transformations.map(db.memoDao().loadMemos(),
         input -> {

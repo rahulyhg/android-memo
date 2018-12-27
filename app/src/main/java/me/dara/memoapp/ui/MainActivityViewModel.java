@@ -37,6 +37,10 @@ import me.dara.memoapp.network.model.Status;
 /**
  * @author sardor
  */
+/***
+ * Business logic class for converting remote or local model to UI model
+ *
+ * */
 public class MainActivityViewModel extends AndroidViewModel {
   public final AppModule module;
   private MemoApp app;
@@ -51,6 +55,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     return module.memoService.postMemo(memo);
   }
 
+
+  // Saves file when user picks image
   public File saveFile(Bitmap bitmap) {
     if (bitmap == null) {
       return null;
@@ -63,6 +69,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     return module.fileManager.saveFile(FilePath.UPLOAD, bos.toByteArray(), fileName);
   }
 
+  // Loads memos from repository(remote or local)
   public LiveData<ApiResponse> loadMemos() {
     return Transformations.map(module.memoService.loadMemos(),
         input -> {
@@ -75,6 +82,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         });
   }
 
+  // Load only one memo from database by memo's id
   public Memo loadMemo(Long id) {
     try {
       return module.executors.IO.submit(() -> {
@@ -94,10 +102,12 @@ public class MainActivityViewModel extends AndroidViewModel {
     return null;
   }
 
+  // Another overloading method for saving file
   public void saveFile(Bitmap bitmap, String fileName) {
     module.fileManager.saveFile(bitmap, fileName);
   }
 
+  // Get local file path from FirebaseStorage path
   public String getFilePath(File file) {
     try {
       File file1 = module.fileManager.getFileByName(FilePath.UPLOAD, file.getName());
@@ -107,17 +117,19 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
   }
 
+  // Check for memo changes when user enters memo creating sceen
   public boolean isChanged(Memo memo) {
-
     Memo localMemo = loadMemo(memo.id);
     if (localMemo == null) {
-      return true;
+      return false;
     }
     int hash1 = localMemo.hashCode();
     int hash2 = memo.hashCode();
     return hash1 != hash2;
   }
 
+
+  // Methid which called before exiting from the app which deletes all the files and drops tables
   public LiveData<Object> exit() {
     MutableLiveData<Object> liveData = new MutableLiveData<Object>();
     module.executors.IO.execute(() -> {

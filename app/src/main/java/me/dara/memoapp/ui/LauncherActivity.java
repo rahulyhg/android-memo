@@ -14,6 +14,10 @@ import me.dara.memoapp.ui.auth.AuthActivity;
 /**
  * @author sardor
  */
+
+/**
+ * Main entry class where checks for user authorization
+ */
 public class LauncherActivity extends AppCompatActivity {
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,9 +36,7 @@ public class LauncherActivity extends AppCompatActivity {
     Handler handler = new Handler();
     handler.postDelayed(() -> {
       startActivity(intent);
-          finish();
-    },1000);
-
-
+      finish();
+    }, 1000);
   }
 }

@@ -14,6 +14,10 @@ import me.dara.memoapp.ui.memoList.MemoListFragment;
 /**
  * @author sardor
  */
+
+/**
+ * Base screen where all other fragments are stacked on top of each other.
+ */
 public class MainActivity extends AppCompatActivity implements MemoCallback {
 
   Fragment memoCreate, memoList;
@@ -28,11 +32,13 @@ public class MainActivity extends AppCompatActivity implements MemoCallback {
     replaceFragment(memoList, MEMO_LIST_FRAGMENT);
   }
 
+  // Method called after creating new memo
   @Override public void onMemoCreated() {
     getSupportFragmentManager().popBackStack();
     ((MemoListFragment) memoList).loadMemos();
   }
 
+  // Method called after clicking one of memos from list
   @Override public void onMemoClicked(Long id) {
     memoCreate = new MemoCreateFragment();
     ((MemoCreateFragment) memoCreate).memoId = id;
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements MemoCallback {
     }
   }
 
+  // Method called after clicking circle add button for creating new memo
   @Override public void onCreateMemo() {
     addFragment(new MemoCreateFragment(), MEMO_CREATE_FRAGMENT);
   }

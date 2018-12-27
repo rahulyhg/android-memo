@@ -8,6 +8,10 @@ import androidx.room.PrimaryKey;
 /**
  * @author sardor
  */
+
+/**
+ * memo table containing MemoEntity model
+ */
 @Entity(tableName = "memo")
 public class MemoEntity {
 

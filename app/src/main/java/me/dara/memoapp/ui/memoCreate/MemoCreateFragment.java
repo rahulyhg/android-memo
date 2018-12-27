@@ -37,6 +37,10 @@ import static android.app.Activity.RESULT_OK;
 /**
  * @author sardor
  */
+
+/**
+ * Screen for editing and creating memos
+ * */
 public class MemoCreateFragment extends Fragment {
 
   MainActivityViewModel viewModel;
@@ -46,6 +50,8 @@ public class MemoCreateFragment extends Fragment {
   public Long memoId = -1L;
   public Memo memo;
 
+
+  // Attaching listener for MainActivity
   @Override public void onAttach(@NonNull Context context) {
     super.onAttach(context);
     callback = (MemoCallback) context;
@@ -58,6 +64,8 @@ public class MemoCreateFragment extends Fragment {
     return binding.getRoot();
   }
 
+
+  // Getting result from image pick
   @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == 1001 && resultCode == RESULT_OK) {
@@ -69,16 +77,27 @@ public class MemoCreateFragment extends Fragment {
     }
   }
 
+
+  // Alert window with warning about discard
   public void showWarning() {
-    Alert alert = Alert.newInstance(getResources().getString(R.string.warning),
-        getResources().getString(R.string.memo_create_exit_msg));
-    alert.listener = () -> {
-      memoId = -1L;
+    String title = binding.editMemoTitle.getText().toString();
+    String descrption = binding.editMemo.getText().toString();
+    memo.title = title;
+    memo.description = descrption;
+    if (viewModel.isChanged(memo)) {
+      Alert alert = Alert.newInstance(getResources().getString(R.string.warning),
+          getResources().getString(R.string.memo_create_exit_msg));
+      alert.listener = () -> {
+        memoId = -1L;
+        memo = null;
+        callback.onBackPressed();
+      };
+      alert.count = 2;
+      alert.show(getChildFragmentManager(), "Alert");
+    } else {
       memo = null;
       callback.onBackPressed();
-    };
-    alert.count = 2;
-    alert.show(getChildFragmentManager(), "Alert");
+    }
   }
 
   @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -115,6 +134,8 @@ public class MemoCreateFragment extends Fragment {
     });
   }
 
+
+  // Setting memo from list to memo create screen
   public void setMemo(Memo localMemo) {
     if (localMemo != null) {
       String title = localMemo.title;
@@ -159,6 +180,7 @@ public class MemoCreateFragment extends Fragment {
     }
   }
 
+  // Posting or updating memos to FireBase databse and FirebaseStorage
   public void postMemo(Memo memo) {
     if (memo.id == null) {
       memo.id = memo.createdTime;
@@ -202,10 +224,4 @@ public class MemoCreateFragment extends Fragment {
     return isValid;
   }
 
-  private void clearFields() {
-    binding.editMemoTitle.setText(null);
-    binding.editMemo.setText(null);
-    binding.dateMemo.setText(R.string.date_mem);
-    binding.imgMemo.setImageResource(R.drawable.ic_camera);
-  }
 }

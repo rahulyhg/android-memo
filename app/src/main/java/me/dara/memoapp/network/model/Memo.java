@@ -9,9 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author sardor
+ * @author ulugbek
  */
-
+/**
+ * Memo class for posting FireBaseDatabase
+ * */
 @IgnoreExtraProperties
 public class Memo {
 

@@ -16,6 +16,9 @@ import me.dara.memoapp.ui.auth.AlertCallback;
 /**
  * @author sardor
  */
+/**
+ * Custom Alert dialog which extends from AppCompat library
+ * */
 public class Alert extends AppCompatDialogFragment {
 
   public String title = "";

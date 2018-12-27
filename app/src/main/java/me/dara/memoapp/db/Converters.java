@@ -10,8 +10,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author sardor
+ * @author ulugbek
  */
+
+/**
+ * Converter  complex object into primitive types in order to save in Room Databse
+ * */
 public class Converters {
 
   Gson gson = new Gson();

@@ -12,7 +12,9 @@ import me.dara.memoapp.network.model.User;
 /**
  * @author sardor
  */
-
+/**
+ * ViewModel class for handling login and registration process
+ * */
 public final class AuthViewModel extends AndroidViewModel {
   private final AppModule module;
 

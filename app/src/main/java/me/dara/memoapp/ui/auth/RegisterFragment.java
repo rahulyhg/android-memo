@@ -31,6 +31,10 @@ import me.dara.memoapp.util.ImageUtil;
 /**
  * @author sardor
  */
+
+/**
+ * Register screen fragment
+ */
 public class RegisterFragment extends Fragment {
 
   FragmentRegisterBinding binding;
@@ -42,7 +46,6 @@ public class RegisterFragment extends Fragment {
     super.onAttach(context);
     callback = (AuthCallback) context;
   }
-
 
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -135,6 +138,7 @@ public class RegisterFragment extends Fragment {
     return isValid;
   }
 
+  // Method called after user successfully registered to system
   private void clearFields() {
     binding.editConfirmPassword.setText("");
     binding.editRegisterPassword.setText("");

@@ -1,14 +1,16 @@
 package me.dara.memoapp;
 
-import java.util.concurrent.Executors;
 import me.dara.memoapp.db.MemoDb;
 import me.dara.memoapp.file.FileManager;
 import me.dara.memoapp.network.MemoService;
-import me.dara.memoapp.network.model.Memo;
 
 /**
- * @author sardor
+ * @author ulugbek
  */
+
+/**
+ * Core components of Application
+ * */
 public final class AppModule {
 
   public MemoService memoService;

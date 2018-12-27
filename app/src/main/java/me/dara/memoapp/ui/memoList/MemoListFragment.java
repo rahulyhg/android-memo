@@ -24,6 +24,13 @@ import me.dara.memoapp.ui.view.ProgressDialog;
 /**
  * A simple {@link Fragment} subclass.
  */
+/**
+ * @author sardor
+ */
+
+/**
+ * Screen which shows list of memos
+ * */
 public class MemoListFragment extends Fragment {
 
   FragmentMemoListBinding binding;
@@ -64,6 +71,7 @@ public class MemoListFragment extends Fragment {
     loadMemos();
   }
 
+  // Method for showing alert windows
   public void alert() {
     Alert alert = Alert.newInstance(getResources().getString(R.string.warning),
         getResources().getString(R.string.exit_msg));

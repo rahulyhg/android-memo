@@ -13,6 +13,10 @@ import me.dara.memoapp.ui.memoList.MemoProvider;
 /**
  * @author sardor
  */
+
+/**
+ * Converting network models into database models
+ * */
 public class EntityUtil {
 
   public static List<Memo> map(List<MemoEntity> list) {
@@ -51,21 +55,6 @@ public class EntityUtil {
   }
 
   public static MemoProvider providerFrom(Memo memo, Context context, FileManager fileManager) {
-    //LinearLayout linearLayout = new LinearLayout(context);
-    //LinearLayout.LayoutParams params =
-    //    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-    //        ViewGroup.LayoutParams.WRAP_CONTENT);
-    //linearLayout.setLayoutParams(params);
-    //linearLayout.setOrientation(LinearLayout.VERTICAL);
-    //for (Map.Entry<String, Boolean> entry : memo.todoList.entrySet()) {
-    //  CheckBox todocheck = new CheckBox(context);
-    //  todocheck.setLayoutParams(params);
-    //  todocheck.setEnabled(false);
-    //  todocheck.setChecked(entry.getValue());
-    //  todocheck.setText(entry.getKey());
-    //  linearLayout.addView(todocheck);
-    //}
-
     String fileName = memo.getFile().getName();
     File localFile = fileManager.getFileByName(FilePath.UPLOAD, fileName);
     String providerUrl = "";

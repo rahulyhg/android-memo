@@ -15,6 +15,10 @@ import me.dara.memoapp.ui.MemoCallback;
 /**
  * @author sardor
  */
+
+/**
+ * Adapter class which converts Memo models to UI element
+ * */
 public class MemoListAdapter extends RecyclerView.Adapter<MemoViewHolder> {
   List<MemoProvider> list = new ArrayList<>();
   MemoCallback callback;
@@ -24,23 +28,12 @@ public class MemoListAdapter extends RecyclerView.Adapter<MemoViewHolder> {
     this.callback = callback;
     this.fileManager = fileManager;
   }
-  //
-  //public void add(MemoProvider memo) {
-  //  list.add(memo);
-  //  notifyItemChanged(getItemCount());
-  //}
 
   public void update(List<MemoProvider> subList) {
     list.clear();
     list.addAll(subList);
     notifyDataSetChanged();
   }
-
-  //public void add(List<MemoProvider> subList) {
-  //  int changedPosition = list.size();
-  //  list.addAll(subList);
-  //  notifyItemRangeChanged(changedPosition, getItemCount());
-  //}
 
   @NonNull @Override
   public MemoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -19,6 +19,9 @@ import me.dara.memoapp.ui.MemoCallback;
 /**
  * @author sardor
  */
+/**
+ * Main class which gets data from MemoProvider  and shows it in UI
+ * */
 public class MemoViewHolder extends RecyclerView.ViewHolder {
 
   MemoCallback callback;
@@ -40,6 +43,8 @@ public class MemoViewHolder extends RecyclerView.ViewHolder {
     textDate = itemView.findViewById(R.id.text_memo_date);
   }
 
+
+  // Listener which listens image loading, after loading image it saves that image into FileSystem
   Target memoImgTarget = new Target() {
     @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
       img.setImageBitmap(bitmap);
@@ -55,6 +60,8 @@ public class MemoViewHolder extends RecyclerView.ViewHolder {
 
     }
   };
+
+  // Logic which converts model to UI cells
 
   public void bind(MemoProvider memo) {
     textTitle.setText(memo.title);

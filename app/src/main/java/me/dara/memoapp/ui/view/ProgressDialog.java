@@ -12,6 +12,10 @@ import me.dara.memoapp.R;
 /**
  * @author sardor
  */
+
+/**
+ * Custom progress
+ */
 public class ProgressDialog extends AppCompatDialogFragment {
 
   @Nullable @Override

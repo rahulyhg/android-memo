@@ -12,7 +12,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * @author sardor
+ * @author ulugbek
+ */
+
+/**
+ * Class which saves, deletes and iterates over files in external storage
  */
 public class FileManager {
   File rootFile;
@@ -31,6 +35,7 @@ public class FileManager {
     }
   }
 
+  // Saves file with given path
   public File saveFile(FilePath path, byte[] data, String fileName) {
     File file;
     if (path.equals(FilePath.UPLOAD)) {
@@ -55,6 +60,7 @@ public class FileManager {
     return file;
   }
 
+  // Find file from path using file name
   public File getFileByName(FilePath path, String name) {
     if (path.equals(FilePath.UPLOAD)) {
       for (File file : uploadFile.listFiles()) {
@@ -81,6 +87,7 @@ public class FileManager {
     return saveFile(FilePath.UPLOAD, bos.toByteArray(), name);
   }
 
+  //Deletes all file from upload folder
   public void deleteAllFiles() {
     deleteFile(uploadFile);
   }

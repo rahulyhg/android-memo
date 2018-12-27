@@ -21,6 +21,9 @@ import me.dara.memoapp.ui.view.ProgressDialog;
 /**
  * @author sardor
  */
+/**
+ * Login screen fragment
+ * */
 public class LoginFragment extends Fragment {
 
   AuthCallback callback;
@@ -78,6 +81,7 @@ public class LoginFragment extends Fragment {
     });
   }
 
+  // Method for loging user to system
   void login(String email, String password) {
     progress.show(getChildFragmentManager(), "ProgressDialog");
     viewModel.signIn(email, password).observe(getViewLifecycleOwner(), response -> {
@@ -94,7 +98,7 @@ public class LoginFragment extends Fragment {
       }
     });
   }
-
+  // Checking user input for empty and errors
   private boolean validateInput(String email, String password) {
     boolean isValid = true;
     if (email.isEmpty()) {

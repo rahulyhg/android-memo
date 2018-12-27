@@ -1,11 +1,11 @@
 package me.dara.memoapp.ui;
 
-import android.widget.ImageView;
-import com.google.firebase.storage.StorageReference;
-
 /**
  * @author sardor
  */
+/**
+ * Listener for handling event like memo creating and memo editing
+ * */
 public interface MemoCallback {
   void onMemoCreated();
 
