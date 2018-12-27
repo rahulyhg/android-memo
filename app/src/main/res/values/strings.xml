@@ -37,5 +37,6 @@
     <string name="memo_does_not_changed">Memo does not changed</string>
     <string name="exit_app">Exit</string>
     <string name="exit_msg">Are you sure want to exit from the Memo app?</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

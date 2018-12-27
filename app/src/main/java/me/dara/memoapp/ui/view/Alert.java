@@ -55,7 +55,7 @@ public class Alert extends AppCompatDialogFragment {
           .setPositiveButton(R.string.yes, (dialog1, which) -> {
             dialog1.dismiss();
             listener.positiveBtnClicked();
-          }).setNegativeButton(android.R.string.no, (dialog, which) -> {
+          }).setNegativeButton(R.string.cancel, (dialog, which) -> {
             dialog.dismiss();
           }).create();
     }
